@@ -19,7 +19,7 @@ shared_examples 'recommendation' do
 
     @client.send(Batch.new(my_users.map { |userId| AddUser.new(userId) }))
     @client.send(Batch.new(my_items.map { |itemId| AddItem.new(itemId) }))
-    @client.send(Batch.new(my_purchases.map { |p| AddPurchase.new(p['userId'], p['itemId'], 0) }))
+    @client.send(Batch.new(my_purchases.map { |p| AddPurchase.new(p['userId'], p['itemId'], 'timestamp' => 0) }))
   end
 
   # TODO: more tests

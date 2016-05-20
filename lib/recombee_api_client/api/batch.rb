@@ -54,9 +54,11 @@ module RecombeeApiClient
         'path' => path
       }
       params = req.query_parameters
+
       if req.body_parameters
         params = params.merge(req.body_parameters)
       end
+      
       bh['params'] = params if params.size > 0
       bh
     end

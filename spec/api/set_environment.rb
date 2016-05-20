@@ -30,11 +30,11 @@ RSpec.shared_context 'set interactions', a: :b do
 
         AddUser.new('user'),
         AddItem.new('item'),
-        AddDetailView.new('user', 'item', 0),
-        AddPurchase.new('user', 'item', 0),
-        AddRating.new('user', 'item', 0, -1),
-        AddCartAddition.new('user', 'item', 0),
-        AddBookmark.new('user', 'item', 0)
+        AddDetailView.new('user', 'item', 'timestamp' => 0),
+        AddPurchase.new('user', 'item', 'timestamp' => 0),
+        AddRating.new('user', 'item', -1, 'timestamp' => 0),
+        AddCartAddition.new('user', 'item', 'timestamp' => 0),
+        AddBookmark.new('user', 'item', 'timestamp' => 0)
     ])
 
     @client.send(requests)

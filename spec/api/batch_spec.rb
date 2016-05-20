@@ -22,8 +22,8 @@ describe RecombeeApiClient::Batch do
       ListItems.new('filter' => "'num' < 99"),
       DeleteItem.new('item1'),
       ListItems.new('filter' => "'num' >= 99"),
-      AddCartAddition.new('user', 'item2', 0),
-      AddCartAddition.new('user', 'item2', 0, 'cascadeCreate' => true)
+      AddCartAddition.new('user', 'item2'),
+      AddCartAddition.new('user', 'item2', 'cascadeCreate' => true)
     ]
     repl = @client.send(Batch.new(reqs))
 

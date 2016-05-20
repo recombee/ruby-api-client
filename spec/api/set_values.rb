@@ -4,7 +4,7 @@ require_relative 'set_environment'
 shared_examples 'set values' do
   include_context 'set environment'
 
-  it 'does not fail with existing entiry and property' do
+  it 'does not fail with existing entity and property' do
     req = described_class.new('entity_id','int_property' => 5)
     expect { @client.send(req) }.not_to raise_exception
   end

@@ -17,22 +17,22 @@ module RecombeeApiClient
   # * *Required arguments*
   #   - +user_id+ -> User who viewed the item
   #   - +item_id+ -> Viewed item
-  #   - +timestamp+ -> Unix timestamp of the view. If you don't have the timestamp value available, you may use some artificial value, such as 0. It is preferable, however, to provide the timestamp whenever possible as the user's preferences may evolve over time.
   #
   # * *Optional arguments (given as hash optional)*
+  #   - +timestamp+ -> UTC timestamp of the view as ISO8601-1 pattern or UTC epoch time. The default value is the current time.
   #   - +duration+ -> Duration of the view
   #   - +cascadeCreate+ -> Sets whether the given user/item should be created if not present in the database.
   #
-    def initialize(user_id, item_id, timestamp, optional = {})
+    def initialize(user_id, item_id, optional = {})
       @user_id = user_id
       @item_id = item_id
-      @timestamp = timestamp
+      @timestamp = optional['timestamp']
       @duration = optional['duration']
       @cascade_create = optional['cascadeCreate']
       @optional = optional
       @timeout = 1000
       @optional.each do |par, _|
-        fail UnknownOptionalParameter.new(par) unless ["duration","cascadeCreate"].include? par
+        fail UnknownOptionalParameter.new(par) unless ["timestamp","duration","cascadeCreate"].include? par
       end
     end
   
@@ -46,7 +46,7 @@ module RecombeeApiClient
       p = Hash.new
       p['userId'] = @user_id
       p['itemId'] = @item_id
-      p['timestamp'] = @timestamp
+      p['timestamp'] = @optional['timestamp'] if @optional['timestamp']
       p['duration'] = @optional['duration'] if @optional['duration']
       p['cascadeCreate'] = @optional['cascadeCreate'] if @optional['cascadeCreate']
       p
