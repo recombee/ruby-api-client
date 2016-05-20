@@ -49,7 +49,7 @@ begin
   puts 'Send items'
   client.send(Batch.new(my_items.map { |itemId| AddItem.new(itemId) }))
   puts 'Send purchases'
-  client.send(Batch.new(my_purchases.map { |p| AddPurchase.new(p['userId'], p['itemId'], 0) }))
+  client.send(Batch.new(my_purchases.map { |p| AddPurchase.new(p['userId'], p['itemId']) }))
   
   # Get recommendations for user 'user-25'
   puts 'Recommend for a user'
@@ -62,8 +62,6 @@ end
 
 ### Using property values
 ```ruby
-#!/usr/bin/env ruby
-
 require 'recombee_api_client'
 include RecombeeApiClient
 
@@ -107,7 +105,7 @@ requests = []
   user_ids = (1..NUM).map{|i| "user-#{i}"}
   user_ids = user_ids.select { |_| rand(0.0..1.0) < PROBABILITY_PURCHASED }
   # Use cascadeCreate to create unexisting users
-  user_ids.each { |user_id| requests.push(AddPurchase.new(user_id, item_id, 0, 'cascadeCreate' => true)) }
+  user_ids.each { |user_id| requests.push(AddPurchase.new(user_id, item_id, 'cascadeCreate' => true)) }
 end
 
 # Send purchases to the recommender system
