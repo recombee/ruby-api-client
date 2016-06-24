@@ -17,7 +17,7 @@ module RecombeeApiClient
     def initialize(account, token, options = {})
       @account = account
       @token = token
-      options[:base_uri] = ENV['API_URI'] if ENV.key? 'API_URI'
+      options[:base_uri] = ENV['RAPI_URI'] if ENV.key? 'RAPI_URI'
       options[:base_uri] ||= 'https://rapi.recombee.com'
       @base_uri = options[:base_uri]
     end
