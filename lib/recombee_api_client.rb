@@ -17,6 +17,7 @@ module RecombeeApiClient
     def initialize(account, token, options = {})
       @account = account
       @token = token
+      @base_uri = ENV['API_URI'] if ENV.key? 'API_URI'
       @base_uri = options[:base_uri] ||= 'https://rapi.recombee.com'
     end
 
@@ -60,7 +61,7 @@ module RecombeeApiClient
     def hmac_post(uri, timeout, options = {})
       url = sign_url(uri)
       # pass arguments in body
-      r = self.class.post(url, body: options, 
+      r = self.class.post(url, body: options,
                         headers: { 'Content-Type' => 'application/json' },
                         timeout: timeout)
       check_errors r
