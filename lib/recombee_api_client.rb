@@ -1,6 +1,6 @@
 require 'recombee_api_client/version'
 require 'securerandom'
-require 'digest/hmac'
+require 'openssl'
 require 'httparty'
 require 'json'
 require 'open-uri'
@@ -17,7 +17,9 @@ module RecombeeApiClient
     def initialize(account, token, options = {})
       @account = account
       @token = token
-      @base_uri = options[:base_uri] ||= 'https://rapi.recombee.com'
+      @base_uri = ENV['RAPI_URI'] if ENV.key? 'RAPI_URI'
+      @base_uri||=  options[:base_uri]
+      @base_uri||= 'https://rapi.recombee.com'
     end
 
     def send(request)
@@ -99,7 +101,8 @@ module RecombeeApiClient
 
     def hmac_sign(uri, time)
       url = uri + time
-      Digest::HMAC.hexdigest(url, @token, Digest::SHA1)
+      digest = OpenSSL::Digest.new('sha1')
+      OpenSSL::HMAC.hexdigest(digest, @token, url)
     end
   end
 end
