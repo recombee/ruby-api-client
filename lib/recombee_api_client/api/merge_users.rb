@@ -15,6 +15,7 @@ module RecombeeApiClient
   class MergeUsers < ApiRequest
     attr_reader :target_user_id, :source_user_id, :keep_source_user
     attr_accessor :timeout
+    attr_accessor :ensure_https
   
   ##
   # * *Required arguments*
@@ -30,6 +31,7 @@ module RecombeeApiClient
       @keep_source_user = optional['keepSourceUser']
       @optional = optional
       @timeout = 1000
+      @ensure_https = false
       @optional.each do |par, _|
         fail UnknownOptionalParameter.new(par) unless ["keepSourceUser"].include? par
       end

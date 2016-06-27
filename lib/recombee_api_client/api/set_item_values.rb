@@ -12,6 +12,7 @@ module RecombeeApiClient
   class SetItemValues < ApiRequest
     attr_reader :item_id, :values
     attr_accessor :timeout
+    attr_accessor :ensure_https
   
   ##
   # * *Required arguments*
@@ -35,6 +36,7 @@ module RecombeeApiClient
       @item_id = item_id
       @values = values
       @timeout = 1000
+      @ensure_https = false
     end
   
     # HTTP method

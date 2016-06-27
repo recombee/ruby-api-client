@@ -9,6 +9,7 @@ module RecombeeApiClient
   class Batch < ApiRequest
     attr_reader :requests
     attr_accessor :timeout
+    attr_accessor :ensure_https
     ##
     # * *Required arguments*
     #   - +requests+ -> Array of API requests.
@@ -17,6 +18,7 @@ module RecombeeApiClient
       @requests = requests
       @body_parameters = requests_to_batch_hash
       @timeout = requests.map{|r| r.timeout}.reduce(:+)
+      @ensure_https = true
     end
 
     # HTTP method

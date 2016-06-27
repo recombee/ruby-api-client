@@ -11,6 +11,7 @@ module RecombeeApiClient
   class ListItems < ApiRequest
     attr_reader :filter
     attr_accessor :timeout
+    attr_accessor :ensure_https
   
   ##
   #
@@ -21,6 +22,7 @@ module RecombeeApiClient
       @filter = optional['filter']
       @optional = optional
       @timeout = 1000
+      @ensure_https = false
       @optional.each do |par, _|
         fail UnknownOptionalParameter.new(par) unless ["filter"].include? par
       end

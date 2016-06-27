@@ -12,6 +12,7 @@ module RecombeeApiClient
   class AddRating < ApiRequest
     attr_reader :user_id, :item_id, :timestamp, :rating, :cascade_create
     attr_accessor :timeout
+    attr_accessor :ensure_https
   
   ##
   # * *Required arguments*
@@ -31,6 +32,7 @@ module RecombeeApiClient
       @cascade_create = optional['cascadeCreate']
       @optional = optional
       @timeout = 1000
+      @ensure_https = false
       @optional.each do |par, _|
         fail UnknownOptionalParameter.new(par) unless ["timestamp","cascadeCreate"].include? par
       end

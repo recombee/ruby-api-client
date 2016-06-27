@@ -11,6 +11,7 @@ module RecombeeApiClient
   class RemoveFromGroup < ApiRequest
     attr_reader :group_id, :item_type, :item_id
     attr_accessor :timeout
+    attr_accessor :ensure_https
   
   ##
   # * *Required arguments*
@@ -23,6 +24,7 @@ module RecombeeApiClient
       @item_type = item_type
       @item_id = item_id
       @timeout = 1000
+      @ensure_https = false
     end
   
     # HTTP method

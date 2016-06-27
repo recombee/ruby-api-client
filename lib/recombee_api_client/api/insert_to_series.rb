@@ -12,6 +12,7 @@ module RecombeeApiClient
   class InsertToSeries < ApiRequest
     attr_reader :series_id, :item_type, :item_id, :time, :cascade_create
     attr_accessor :timeout
+    attr_accessor :ensure_https
   
   ##
   # * *Required arguments*
@@ -31,6 +32,7 @@ module RecombeeApiClient
       @cascade_create = optional['cascadeCreate']
       @optional = optional
       @timeout = 1000
+      @ensure_https = false
       @optional.each do |par, _|
         fail UnknownOptionalParameter.new(par) unless ["cascadeCreate"].include? par
       end

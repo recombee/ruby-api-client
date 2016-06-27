@@ -12,6 +12,7 @@ module RecombeeApiClient
   class GetItemPropertyInfo < ApiRequest
     attr_reader :property_name
     attr_accessor :timeout
+    attr_accessor :ensure_https
   
   ##
   # * *Required arguments*
@@ -20,6 +21,7 @@ module RecombeeApiClient
     def initialize(property_name)
       @property_name = property_name
       @timeout = 1000
+      @ensure_https = false
     end
   
     # HTTP method

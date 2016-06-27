@@ -12,6 +12,7 @@ module RecombeeApiClient
   class AddItemProperty < ApiRequest
     attr_reader :property_name, :type
     attr_accessor :timeout
+    attr_accessor :ensure_https
   
   ##
   # * *Required arguments*
@@ -24,6 +25,7 @@ module RecombeeApiClient
       @property_name = property_name
       @type = type
       @timeout = 1000
+      @ensure_https = false
     end
   
     # HTTP method

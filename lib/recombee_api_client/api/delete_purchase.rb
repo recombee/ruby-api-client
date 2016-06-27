@@ -12,6 +12,7 @@ module RecombeeApiClient
   class DeletePurchase < ApiRequest
     attr_reader :user_id, :item_id, :timestamp
     attr_accessor :timeout
+    attr_accessor :ensure_https
   
   ##
   # * *Required arguments*
@@ -27,6 +28,7 @@ module RecombeeApiClient
       @timestamp = optional['timestamp']
       @optional = optional
       @timeout = 1000
+      @ensure_https = false
       @optional.each do |par, _|
         fail UnknownOptionalParameter.new(par) unless ["timestamp"].include? par
       end

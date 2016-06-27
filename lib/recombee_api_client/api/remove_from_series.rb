@@ -11,6 +11,7 @@ module RecombeeApiClient
   class RemoveFromSeries < ApiRequest
     attr_reader :series_id, :item_type, :item_id, :time
     attr_accessor :timeout
+    attr_accessor :ensure_https
   
   ##
   # * *Required arguments*
@@ -25,6 +26,7 @@ module RecombeeApiClient
       @item_id = item_id
       @time = time
       @timeout = 1000
+      @ensure_https = false
     end
   
     # HTTP method

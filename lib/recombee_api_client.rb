@@ -11,87 +11,103 @@ require 'recombee_api_client/errors'
 Gem.find_files('recombee_api_client/api/*.rb').each { |path| require path }
 
 module RecombeeApiClient
+  ##
+  # Client for sending requests to Recombee recommender system
   class RecombeeClient
     include HTTParty
 
-    def initialize(account, token, options = {})
+    ##
+    #   - +account+ -> Name of your account at Recombee
+    #   - +token+ -> Secret token obtained from Recombee for signing requests
+    #   - +protocol+ -> Default protocol for sending requests. Possible values: 'http', 'https'.
+    def initialize(account, token, protocol = 'http', options = {})
       @account = account
       @token = token
+      @protocol = protocol
       @base_uri = ENV['RAPI_URI'] if ENV.key? 'RAPI_URI'
       @base_uri||=  options[:base_uri]
-      @base_uri||= 'https://rapi.recombee.com'
+      @base_uri||= 'rapi.recombee.com'
     end
 
+    ##
+    #   - +request+ -> ApiRequest to be sent to Recombee recommender
     def send(request)
-      @request = request
-      uri = request.path
-      uri.slice! ('/{databaseId}/')
-      uri = URI.escape uri
       timeout = request.timeout / 1000
+      uri = process_request_uri(request)
+      uri = sign_url(uri)
+      protocol = request.ensure_https ? 'https' : @protocol
+      uri = protocol + '://' + @base_uri + uri
       # puts uri
       begin
         case request.method
         when :put
-          hmac_put(uri, timeout)
+          put(request, uri, timeout)
         when :get
-          hmac_get(uri, timeout)
+          get(request, uri, timeout)
         when :post
-          hmac_post(uri, timeout, request.body_parameters.to_json)
+          post(request, uri, timeout)
         when :delete
-          hmac_delete(uri, timeout)
+          delete(request, uri, timeout)
         end
       rescue Timeout::Error
-        fail ApiTimeout.new(@request)
+        fail ApiTimeout.new(request)
       end
     end
 
     private
 
-    def hmac_put(uri, timeout, options = {})
-      r = self.class.put(sign_url(uri), query: options, timeout: timeout)
-      check_errors r
-      r.body
+    def put(request, uri, timeout)
+      response = self.class.put(uri, timeout: timeout)
+      check_errors(response, request)
+      response.body
     end
 
-    def hmac_get(uri, timeout, options = {})
-      r = self.class.get(sign_url(uri), query: options, timeout: timeout)
-      check_errors r
-      JSON.parse(r.body)
+    def get(request, uri, timeout)
+      response = self.class.get(uri, timeout: timeout)
+      check_errors(response, request)
+      JSON.parse(response.body)
     end
 
-    def hmac_post(uri, timeout, options = {})
-      url = sign_url(uri)
+    def post(request, uri, timeout)
       # pass arguments in body
-      r = self.class.post(url, body: options, 
+      response = self.class.post(uri, body: request.body_parameters.to_json, 
                         headers: { 'Content-Type' => 'application/json' },
                         timeout: timeout)
-      check_errors r
+      check_errors(response, request)
       begin
-        return JSON.parse(r.body)
+        return JSON.parse(response.body)
       rescue JSON::ParserError
-        return r.body
+        return response.body
       end
     end
 
-    def hmac_delete(uri, timeout, options = {})
-      r = self.class.delete(sign_url(uri), query: options, timeout: timeout)
-      check_errors r
-      r.body
+    def delete(request, uri, timeout)
+      response = self.class.delete(uri, timeout: timeout)
+      check_errors(response, request)
+      response.body
     end
 
-    def check_errors(response)
+    def check_errors(response, request)
       status_code = response.code
       return if status_code == 200 || status_code == 201
-      fail ResponseError.new(@request, status_code, response.body)
+      fail ResponseError.new(request, status_code, response.body)
+    end
+
+    def process_request_uri(request)
+      uri = request.path
+      uri.slice! ('/{databaseId}/')
+      uri = URI.escape uri
+      uri
     end
 
     # Sign request with HMAC, request URI must be exacly the same
     # We have 30s to complete request with this token
-    def sign_url(req)
-      uri = "/#{@account}/#{req}"
+    def sign_url(req_part)
+      uri = "/#{@account}/#{req_part}"
       time = hmac_time(uri)
       sign = hmac_sign(uri, time)
-      @base_uri + uri + time + "&hmac_sign=#{sign}"
+      res = uri + time + "&hmac_sign=#{sign}"
+      res
     end
 
     def hmac_time(uri)

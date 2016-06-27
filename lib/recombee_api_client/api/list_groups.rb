@@ -11,11 +11,13 @@ module RecombeeApiClient
   class ListGroups < ApiRequest
   
     attr_accessor :timeout
+    attr_accessor :ensure_https
   
   ##
   #
     def initialize()
       @timeout = 1000
+      @ensure_https = false
     end
   
     # HTTP method

@@ -12,6 +12,7 @@ module RecombeeApiClient
   class UserBasedRecommendation < ApiRequest
     attr_reader :user_id, :count, :filter, :booster, :allow_nonexistent, :cascade_create, :scenario, :diversity, :min_relevance, :rotation_rate, :rotation_time
     attr_accessor :timeout
+    attr_accessor :ensure_https
   
   ##
   # * *Required arguments*
@@ -47,6 +48,7 @@ module RecombeeApiClient
       @rotation_time = optional['rotationTime']
       @optional = optional
       @timeout = 3000
+      @ensure_https = false
       @optional.each do |par, _|
         fail UnknownOptionalParameter.new(par) unless ["filter","booster","allowNonexistent","cascadeCreate","scenario","diversity","minRelevance","rotationRate","rotationTime"].include? par
       end

@@ -12,11 +12,13 @@ module RecombeeApiClient
   class ResetDatabase < ApiRequest
   
     attr_accessor :timeout
+    attr_accessor :ensure_https
   
   ##
   #
     def initialize()
       @timeout = 5000
+      @ensure_https = false
     end
   
     # HTTP method

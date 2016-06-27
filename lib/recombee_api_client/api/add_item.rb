@@ -14,6 +14,7 @@ module RecombeeApiClient
   class AddItem < ApiRequest
     attr_reader :item_id
     attr_accessor :timeout
+    attr_accessor :ensure_https
   
   ##
   # * *Required arguments*
@@ -22,6 +23,7 @@ module RecombeeApiClient
     def initialize(item_id)
       @item_id = item_id
       @timeout = 1000
+      @ensure_https = false
     end
   
     # HTTP method

@@ -11,6 +11,7 @@ module RecombeeApiClient
   class ListUserBookmarks < ApiRequest
     attr_reader :user_id
     attr_accessor :timeout
+    attr_accessor :ensure_https
   
   ##
   # * *Required arguments*
@@ -19,6 +20,7 @@ module RecombeeApiClient
     def initialize(user_id)
       @user_id = user_id
       @timeout = 1000
+      @ensure_https = false
     end
   
     # HTTP method
