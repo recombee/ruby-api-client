@@ -17,13 +17,19 @@ module RecombeeApiClient
   # * *Required arguments*
   #   - +user_id+ -> ID of the user who made the cart addition.
   #   - +item_id+ -> ID of the item of which was added to cart.
-  #   - +timestamp+ -> Unix timestamp of the cart addition.
   #
-    def initialize(user_id, item_id, timestamp)
+  # * *Optional arguments (given as hash optional)*
+  #   - +timestamp+ -> Unix timestamp of the cart addition. If the `timestamp` is omitted, then all the cart additions with given `userId` and `itemId` are deleted.
+  #
+    def initialize(user_id, item_id, optional = {})
       @user_id = user_id
       @item_id = item_id
-      @timestamp = timestamp
+      @timestamp = optional['timestamp']
+      @optional = optional
       @timeout = 1000
+      @optional.each do |par, _|
+        fail UnknownOptionalParameter.new(par) unless ["timestamp"].include? par
+      end
     end
   
     # HTTP method
@@ -43,7 +49,7 @@ module RecombeeApiClient
       params = {}
       params['userId'] = @user_id
       params['itemId'] = @item_id
-      params['timestamp'] = @timestamp
+      params['timestamp'] = @optional['timestamp'] if @optional['timestamp']
       params
     end
   
@@ -54,7 +60,11 @@ module RecombeeApiClient
   
     # Relative path to the endpoint including query parameters
     def path
-      p = "/{databaseId}/cartadditions/?userId=#{@user_id}&itemId=#{@item_id}&timestamp=#{@timestamp}"
+      p = "/{databaseId}/cartadditions/?userId=#{@user_id}&itemId=#{@item_id}"
+      if @optional.include? 'timestamp'
+        p += (p.include? '?') ? '&' : '?'
+        p += "timestamp=#{@optional['timestamp']}"
+      end
       p
     end
   end

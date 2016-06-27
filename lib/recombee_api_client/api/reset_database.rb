@@ -16,7 +16,7 @@ module RecombeeApiClient
   ##
   #
     def initialize()
-      @timeout = 3000
+      @timeout = 5000
     end
   
     # HTTP method

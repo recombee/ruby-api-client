@@ -10,7 +10,7 @@ module RecombeeApiClient
   #Based on user's past interactions (purchases, ratings, etc.) with the items, recommends top-N items that are most likely to be of high value for a given user.
   #
   class UserBasedRecommendation < ApiRequest
-    attr_reader :user_id, :count, :filter, :booster, :allow_nonexistent, :diversity, :min_relevance, :rotation_rate, :rotation_time
+    attr_reader :user_id, :count, :filter, :booster, :allow_nonexistent, :cascade_create, :scenario, :diversity, :min_relevance, :rotation_rate, :rotation_time
     attr_accessor :timeout
   
   ##
@@ -21,7 +21,9 @@ module RecombeeApiClient
   # * *Optional arguments (given as hash optional)*
   #   - +filter+ -> Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to filter recommended items based on the values of their attributes.
   #   - +booster+ -> Number-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to boost recommendation rate of some items based on the values of their attributes.
-  #   - +allowNonexistent+ -> If the user does not exist in the database, returns a list of non-personalized recommendations instead of causing HTTP 404 error.
+  #   - +allowNonexistent+ -> If the user does not exist in the database, returns a list of non-personalized recommendations instead of causing HTTP 404 error. It doesn't create the user in the database.
+  #   - +cascadeCreate+ -> If the user does not exist in the database, returns a list of non-personalized recommendations and creates the user in the database. This allows for example rotations in the following recommendations for that user, as the user will be already known to the system.
+  #   - +scenario+ -> Scenario defines a particular application of recommendations. It can be for example "homepage" or "cart". The AI which optimizes models in order to get the best results may optimize different scenarios separately, or even use different models in each of the scenarios.
   #   - +diversity+ -> **Expert option** Real number from [0.0, 1.0] which determines how much mutually dissimilar should the recommended items be. The default value is 0.0, i.e., no diversification. Value 1.0 means maximal diversification.
   #
   #   - +minRelevance+ -> **Expert option** Specifies the threshold of how much relevant must the recommended items be to the user. Possible values one of: "low", "medium", "high". The default value is "low", meaning that the system attempts to recommend number of items equal to *count* at any cost. If there are not enough data (such as interactions or item properties), this may even lead to bestseller-based recommendations to be appended to reach the full *count*. This behavior may be suppressed by using "medium" or "high" values. In such case, the system only recommends items of at least the requested qualit, and may return less than *count* items when there is not enough data to fulfill it.
@@ -37,6 +39,8 @@ module RecombeeApiClient
       @filter = optional['filter']
       @booster = optional['booster']
       @allow_nonexistent = optional['allowNonexistent']
+      @cascade_create = optional['cascadeCreate']
+      @scenario = optional['scenario']
       @diversity = optional['diversity']
       @min_relevance = optional['minRelevance']
       @rotation_rate = optional['rotationRate']
@@ -44,7 +48,7 @@ module RecombeeApiClient
       @optional = optional
       @timeout = 3000
       @optional.each do |par, _|
-        fail UnknownOptionalParameter.new(par) unless ["filter","booster","allowNonexistent","diversity","minRelevance","rotationRate","rotationTime"].include? par
+        fail UnknownOptionalParameter.new(par) unless ["filter","booster","allowNonexistent","cascadeCreate","scenario","diversity","minRelevance","rotationRate","rotationTime"].include? par
       end
     end
   
@@ -67,6 +71,8 @@ module RecombeeApiClient
       params['filter'] = @optional['filter'] if @optional['filter']
       params['booster'] = @optional['booster'] if @optional['booster']
       params['allowNonexistent'] = @optional['allowNonexistent'] if @optional['allowNonexistent']
+      params['cascadeCreate'] = @optional['cascadeCreate'] if @optional['cascadeCreate']
+      params['scenario'] = @optional['scenario'] if @optional['scenario']
       params['diversity'] = @optional['diversity'] if @optional['diversity']
       params['minRelevance'] = @optional['minRelevance'] if @optional['minRelevance']
       params['rotationRate'] = @optional['rotationRate'] if @optional['rotationRate']
@@ -93,6 +99,14 @@ module RecombeeApiClient
       if @optional.include? 'allowNonexistent'
         p += (p.include? '?') ? '&' : '?'
         p += "allowNonexistent=#{@optional['allowNonexistent']}"
+      end
+      if @optional.include? 'cascadeCreate'
+        p += (p.include? '?') ? '&' : '?'
+        p += "cascadeCreate=#{@optional['cascadeCreate']}"
+      end
+      if @optional.include? 'scenario'
+        p += (p.include? '?') ? '&' : '?'
+        p += "scenario=#{@optional['scenario']}"
       end
       if @optional.include? 'diversity'
         p += (p.include? '?') ? '&' : '?'
