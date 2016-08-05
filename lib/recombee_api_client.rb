@@ -96,8 +96,23 @@ module RecombeeApiClient
     def process_request_uri(request)
       uri = request.path
       uri.slice! ('/{databaseId}/')
+      uri += query_parameters_to_url(request)
       uri = URI.escape uri
       uri
+    end
+
+    def query_parameters_to_url(req)
+      ps = ''
+      req.query_parameters.each do |name, val|
+        ps += (ps.include? '?') ? '&' : '?'
+        ps += "#{name}=#{format_query_parameter_value(val)}"
+      end
+      ps
+    end
+
+    def format_query_parameter_value(value)
+      return value unless value.kind_of?(Array)
+      value.join(',')
     end
 
     # Sign request with HMAC, request URI must be exacly the same

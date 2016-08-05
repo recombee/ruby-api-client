@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Deletes a bookmark uniquely specified by `userId`, `itemId`, and `timestamp`.
+  #Deletes a bookmark uniquely specified by `userId`, `itemId`, and `timestamp` or all the bookmarks with given `userId` and `itemId` if `timestamp` is omitted.
   #
   class DeleteBookmark < ApiRequest
     attr_reader :user_id, :item_id, :timestamp
@@ -45,7 +45,7 @@ module RecombeeApiClient
       p
     end
   
-    # Values of query path parameters as a Hash.
+    # Values of query parameters as a Hash.
     # name of parameter => value of the parameter
     def query_parameters
       params = {}
@@ -56,18 +56,8 @@ module RecombeeApiClient
     end
   
     # Relative path to the endpoint
-    def basic_path
-      "/{databaseId}/bookmarks/"
-    end
-  
-    # Relative path to the endpoint including query parameters
     def path
-      p = "/{databaseId}/bookmarks/?userId=#{@user_id}&itemId=#{@item_id}"
-      if @optional.include? 'timestamp'
-        p += (p.include? '?') ? '&' : '?'
-        p += "timestamp=#{@optional['timestamp']}"
-      end
-      p
+      "/{databaseId}/bookmarks/"
     end
   end
 end

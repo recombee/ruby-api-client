@@ -4,14 +4,16 @@
 
 require 'spec_helper'
 require_relative 'set_environment'
-shared_examples 'delete interaction' do
+shared_examples 'remove from group' do
 include_context 'set environment'
-include_context 'set interactions'
 
-  it 'does not fail with existing entity id' do
-    req = described_class.new('user','item',{'timestamp' => 0})
+  it 'does not fail when removing item that is contained in the set' do
+    req = described_class.new('entity_id','item','entity_id')
     resp = @client.send(req)
-    req = described_class.new('user','item')
+  end
+
+  it 'fails when removing item that is not contained in the set' do
+    req = described_class.new('entity_id','item','not_contained')
     expect { @client.send(req) }.to raise_exception { |exception|
        expect(exception).to be_a(RecombeeApiClient::ResponseError)
        expect(exception.status_code).to eq 404

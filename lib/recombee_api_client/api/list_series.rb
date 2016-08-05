@@ -31,7 +31,7 @@ module RecombeeApiClient
       p
     end
   
-    # Values of query path parameters as a Hash.
+    # Values of query parameters as a Hash.
     # name of parameter => value of the parameter
     def query_parameters
       params = {}
@@ -39,14 +39,8 @@ module RecombeeApiClient
     end
   
     # Relative path to the endpoint
-    def basic_path
-      "/{databaseId}/series/list/"
-    end
-  
-    # Relative path to the endpoint including query parameters
     def path
-      p = "/{databaseId}/series/list/"
-      p
+      "/{databaseId}/series/list/"
     end
   end
 end

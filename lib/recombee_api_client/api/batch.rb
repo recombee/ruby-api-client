@@ -29,9 +29,11 @@ module RecombeeApiClient
     # Values of body parameters as a Hash
     attr_reader :body_parameters
 
-    # Get values of parameters in form a Hash.
+    # Values of query path parameters as a Hash.
     # name of parameter => value of the parameter
-    def params_hash
+    def query_parameters
+      params = {}
+      params
     end
 
     # Relative path to the endpoint
@@ -49,7 +51,7 @@ module RecombeeApiClient
     end
 
     def request_to_batch_hash(req)
-      path = req.basic_path
+      path = req.path
       path.slice! ('/{databaseId}')
       bh = {
         'method' => req.method.to_s.upcase,

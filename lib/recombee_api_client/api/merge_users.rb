@@ -48,7 +48,7 @@ module RecombeeApiClient
       p
     end
   
-    # Values of query path parameters as a Hash.
+    # Values of query parameters as a Hash.
     # name of parameter => value of the parameter
     def query_parameters
       params = {}
@@ -57,18 +57,8 @@ module RecombeeApiClient
     end
   
     # Relative path to the endpoint
-    def basic_path
-      "/{databaseId}/users/#{@target_user_id}/merge/#{@source_user_id}"
-    end
-  
-    # Relative path to the endpoint including query parameters
     def path
-      p = "/{databaseId}/users/#{@target_user_id}/merge/#{@source_user_id}"
-      if @optional.include? 'keepSourceUser'
-        p += (p.include? '?') ? '&' : '?'
-        p += "keepSourceUser=#{@optional['keepSourceUser']}"
-      end
-      p
+      "/{databaseId}/users/#{@target_user_id}/merge/#{@source_user_id}"
     end
   end
 end

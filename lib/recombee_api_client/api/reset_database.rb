@@ -17,7 +17,7 @@ module RecombeeApiClient
   ##
   #
     def initialize()
-      @timeout = 5000
+      @timeout = 20000
       @ensure_https = false
     end
   
@@ -32,7 +32,7 @@ module RecombeeApiClient
       p
     end
   
-    # Values of query path parameters as a Hash.
+    # Values of query parameters as a Hash.
     # name of parameter => value of the parameter
     def query_parameters
       params = {}
@@ -40,14 +40,8 @@ module RecombeeApiClient
     end
   
     # Relative path to the endpoint
-    def basic_path
-      "/{databaseId}/"
-    end
-  
-    # Relative path to the endpoint including query parameters
     def path
-      p = "/{databaseId}/"
-      p
+      "/{databaseId}/"
     end
   end
 end

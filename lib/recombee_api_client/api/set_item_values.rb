@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Set/update (some) property values of a given item.
+  #Set/update (some) property values of a given item. The properties (columns) must be previously created by [Add item property](https://docs.recombee.com/api.html#add-item-property).
   #
   class SetItemValues < ApiRequest
     attr_reader :item_id, :values
@@ -23,8 +23,9 @@ module RecombeeApiClient
   #Example of body:
   #```
   #  {
-  #    "string_property": "strvalue",
-  #    "integer_property": 42,
+  #    "product_description": "4K TV with 3D feature",
+  #    "categories":   ["Electronics", "Televisions"],
+  #    "price_usd": 342,
   #    "!cascadeCreate": true
   #  }
   #```
@@ -51,7 +52,7 @@ module RecombeeApiClient
       p
     end
   
-    # Values of query path parameters as a Hash.
+    # Values of query parameters as a Hash.
     # name of parameter => value of the parameter
     def query_parameters
       params = {}
@@ -59,14 +60,8 @@ module RecombeeApiClient
     end
   
     # Relative path to the endpoint
-    def basic_path
-      "/{databaseId}/items/#{@item_id}"
-    end
-  
-    # Relative path to the endpoint including query parameters
     def path
-      p = "/{databaseId}/items/#{@item_id}"
-      p
+      "/{databaseId}/items/#{@item_id}"
     end
   end
 end

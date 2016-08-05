@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Deletes an existing rating specified by (`userId`, `itemId`, `timestamp`) from the database.
+  #Deletes an existing rating specified by (`userId`, `itemId`, `timestamp`) from the database or all the ratings with given `userId` and `itemId` if `timestamp` is omitted.
   #
   class DeleteRating < ApiRequest
     attr_reader :user_id, :item_id, :timestamp
@@ -45,7 +45,7 @@ module RecombeeApiClient
       p
     end
   
-    # Values of query path parameters as a Hash.
+    # Values of query parameters as a Hash.
     # name of parameter => value of the parameter
     def query_parameters
       params = {}
@@ -56,18 +56,8 @@ module RecombeeApiClient
     end
   
     # Relative path to the endpoint
-    def basic_path
-      "/{databaseId}/ratings/"
-    end
-  
-    # Relative path to the endpoint including query parameters
     def path
-      p = "/{databaseId}/ratings/?userId=#{@user_id}&itemId=#{@item_id}"
-      if @optional.include? 'timestamp'
-        p += (p.include? '?') ? '&' : '?'
-        p += "timestamp=#{@optional['timestamp']}"
-      end
-      p
+      "/{databaseId}/ratings/"
     end
   end
 end

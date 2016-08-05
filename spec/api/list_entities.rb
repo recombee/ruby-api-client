@@ -1,11 +1,16 @@
+#
+# This file is auto-generated, do not edit
+#
+
 require 'spec_helper'
 require_relative 'set_environment'
-
 shared_examples 'list entities' do
-  include_context 'set environment'
+include_context 'set environment'
 
   it 'lists entities' do
-    list_req = described_class.new
-    expect(@client.send(list_req)).to match_array ['entity_id']
+    req = described_class.new()
+    resp = @client.send(req)
+    expect(resp).to eq ['entity_id']
   end
+
 end
