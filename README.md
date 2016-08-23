@@ -57,7 +57,7 @@ begin
   puts 'Recommend for a user'
   recommended = client.send(UserBasedRecommendation.new('user-25', 5, 'rotationRate' => 0))
   puts "Recommended items: #{recommended}"
-rescue ResponseError => e
+rescue APIError => e
   puts e
 end
 ```

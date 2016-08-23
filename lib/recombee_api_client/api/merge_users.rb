@@ -13,7 +13,7 @@ module RecombeeApiClient
   #Merging happens between two users referred to as the *source* and the *target*. After the merge, all the interactions of the source user are attributed to the target user, and the source user is **deleted** unless special parameter `keepSourceUser` is set `true`.
   #
   class MergeUsers < ApiRequest
-    attr_reader :target_user_id, :source_user_id, :keep_source_user
+    attr_reader :target_user_id, :source_user_id, :keep_source_user, :cascade_create
     attr_accessor :timeout
     attr_accessor :ensure_https
   
@@ -23,17 +23,19 @@ module RecombeeApiClient
   #   - +source_user_id+ -> ID of the target user.
   #
   # * *Optional arguments (given as hash optional)*
-  #   - +keepSourceUser+ -> If true, the source user will not be deleted, but also kept in the database..
+  #   - +keepSourceUser+ -> If true, the source user will not be deleted, but also kept in the database.
+  #   - +cascadeCreate+ -> Sets whether the user *targetUserId* should be created if not present in the database.
   #
     def initialize(target_user_id, source_user_id, optional = {})
       @target_user_id = target_user_id
       @source_user_id = source_user_id
       @keep_source_user = optional['keepSourceUser']
+      @cascade_create = optional['cascadeCreate']
       @optional = optional
       @timeout = 1000
       @ensure_https = false
       @optional.each do |par, _|
-        fail UnknownOptionalParameter.new(par) unless ["keepSourceUser"].include? par
+        fail UnknownOptionalParameter.new(par) unless ["keepSourceUser","cascadeCreate"].include? par
       end
     end
   
@@ -53,6 +55,7 @@ module RecombeeApiClient
     def query_parameters
       params = {}
       params['keepSourceUser'] = @optional['keepSourceUser'] if @optional['keepSourceUser']
+      params['cascadeCreate'] = @optional['cascadeCreate'] if @optional['cascadeCreate']
       params
     end
   

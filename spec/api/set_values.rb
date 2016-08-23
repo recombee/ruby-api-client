@@ -12,6 +12,11 @@ include_context 'set environment'
     resp = @client.send(req)
   end
 
+  it 'does not fail with non-ASCII string' do
+    req = described_class.new('entity_id',{'str_property' => 'šřžذ的‎'})
+    resp = @client.send(req)
+  end
+
   it 'sets multiple properties' do
     req = described_class.new('entity_id',{'int_property' => 5,'str_property' => 'test'})
     resp = @client.send(req)
