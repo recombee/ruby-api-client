@@ -23,6 +23,14 @@ include_context 'set environment'
   end
 
   it 'fails with nonexisting item id' do
+    req = described_class.new('entity_id','nonex_id')
+    expect { @client.send(req) }.to raise_exception { |exception|
+       expect(exception).to be_a(RecombeeApiClient::ResponseError)
+       expect(exception.status_code).to eq 404
+     }
+  end
+
+  it 'fails with nonexisting user id' do
     req = described_class.new('nonex_id','entity_id')
     expect { @client.send(req) }.to raise_exception { |exception|
        expect(exception).to be_a(RecombeeApiClient::ResponseError)

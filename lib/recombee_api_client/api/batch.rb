@@ -14,11 +14,16 @@ module RecombeeApiClient
     # * *Required arguments*
     #   - +requests+ -> Array of API requests.
     #
-    def initialize(requests)
+    def initialize(requests, optional = {})
       @requests = requests
+      @optional = optional
       @body_parameters = requests_to_batch_hash
       @timeout = requests.map{|r| r.timeout}.reduce(:+)
       @ensure_https = true
+
+      @optional.each do |par, _|
+        fail UnknownOptionalParameter.new(par) unless ["distinctRecomms"].include? par
+      end
     end
 
     # HTTP method
@@ -47,7 +52,9 @@ module RecombeeApiClient
     def requests_to_batch_hash
       reqs = []
       @requests.each { |r| reqs.push(request_to_batch_hash r) }
-      {'requests' => reqs}
+      result = {'requests' => reqs}
+      result['distinctRecomms'] = @optional['distinctRecomms'] if @optional.key? 'distinctRecomms'
+      result
     end
 
     def request_to_batch_hash(req)

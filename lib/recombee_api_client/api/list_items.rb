@@ -21,7 +21,7 @@ module RecombeeApiClient
     def initialize(optional = {})
       @filter = optional['filter']
       @optional = optional
-      @timeout = 1000
+      @timeout = 30000
       @ensure_https = false
       @optional.each do |par, _|
         fail UnknownOptionalParameter.new(par) unless ["filter"].include? par
