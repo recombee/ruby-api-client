@@ -6,6 +6,7 @@ require 'json'
 require 'open-uri'
 require 'net/https'
 require 'timeout'
+require 'cgi'
 
 require 'recombee_api_client/errors'
 Gem.find_files('recombee_api_client/api/*.rb').each { |path| require path }
@@ -97,7 +98,6 @@ module RecombeeApiClient
       uri = request.path
       uri.slice! ('/{databaseId}/')
       uri += query_parameters_to_url(request)
-      uri = URI.escape uri
       uri
     end
 
@@ -111,8 +111,8 @@ module RecombeeApiClient
     end
 
     def format_query_parameter_value(value)
-      return value unless value.kind_of?(Array)
-      value.join(',')
+      return CGI::escape("#{value}") unless value.kind_of?(Array)
+      value.map{|v| CGI::escape("#{v}")}.join(',')
     end
 
     # Sign request with HMAC, request URI must be exacly the same
