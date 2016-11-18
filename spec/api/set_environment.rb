@@ -16,7 +16,10 @@ RSpec.shared_context 'set environment', a: :b do
         InsertToSeries.new('entity_id', 'item', 'entity_id', 1),
         AddItemProperty.new('int_property', 'int'),
         AddItemProperty.new('str_property', 'string'),
-        SetItemValues.new('entity_id', {'int_property' => 42, 'str_property' => 'hello'})
+        SetItemValues.new('entity_id', {'int_property' => 42, 'str_property' => 'hello'}),
+        AddUserProperty.new('int_property', 'int'),
+        AddUserProperty.new('str_property', 'string'),
+        SetUserValues.new('entity_id', {'int_property' => 42, 'str_property' => 'hello'})        
     ])
 
     @client.send(requests)
