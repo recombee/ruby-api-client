@@ -1,16 +1,12 @@
-#
-# This file is auto-generated, do not edit
-#
-
 module RecombeeApiClient
-  require_relative 'request'
+  require_relative 'set_values'
   require_relative '../errors'
   
   ##
   #Set/update (some) property values of a given item. The properties (columns) must be previously created by [Add item property](https://docs.recombee.com/api.html#add-item-property).
   #
-  class SetItemValues < ApiRequest
-    attr_reader :item_id, :values
+  class SetItemValues < SetValues
+    attr_reader :item_id
     attr_accessor :timeout
     attr_accessor :ensure_https
   
@@ -26,6 +22,7 @@ module RecombeeApiClient
   #    "product_description": "4K TV with 3D feature",
   #    "categories":   ["Electronics", "Televisions"],
   #    "price_usd": 342,
+  #    "in_stock_from": "2016-11-16T08:00Z",
   #    "!cascadeCreate": true
   #  }
   #```
@@ -33,30 +30,14 @@ module RecombeeApiClient
   #Special parameter `!cascadeCreate` may be used. It indicates that the item of the given itemId should be created if it does not exist in the database, as if the corresponding PUT method was used. Note the exclamation mark (!) at the beginning of the parameter's name to distinguish it from item property names.
   #
   #
-    def initialize(item_id, values)
+  # * *Optional arguments (given as hash optional)*
+  #   - +cascadeCreate+ -> Sets whether the item should be created  if not present in the database.
+  #
+    def initialize(item_id, values, optional = {})
+      super(values, optional)
       @item_id = item_id
-      @values = values
       @timeout = 1000
       @ensure_https = false
-    end
-  
-    # HTTP method
-    def method
-      :post
-    end
-  
-    # Values of body parameters as a Hash
-    def body_parameters
-      p = Hash.new
-      p = p.merge(@values)
-      p
-    end
-  
-    # Values of query parameters as a Hash.
-    # name of parameter => value of the parameter
-    def query_parameters
-      params = {}
-      params
     end
   
     # Relative path to the endpoint

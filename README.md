@@ -29,36 +29,37 @@ Or install it yourself as:
 require 'recombee_api_client'
 include RecombeeApiClient
 
-# Prepare some items and users 
-NUM = 100
-my_users = (1..NUM).map { |i| "user-#{i}" }
-my_items = (1..NUM).map { |i| "item-#{i}" }
+client = RecombeeClient.new('client-test', 'jGGQ6ZKa8rQ1zTAyxTc0EMn55YPF7FJLUtaMLhbsGxmvwxgTwXYqmUk5xVZFw98L')
 
-#Generate some random purchases of items by users
+# Generate some random purchases of items by users
+NUM = 100
 PROBABILITY_PURCHASED = 0.1
-my_purchases = []
-my_users.each do |user|
-  p = my_items.select { |_| rand(0.0..1.0) < PROBABILITY_PURCHASED }
-  p.each { |item| my_purchases.push('userId' => user, 'itemId' => item) }
+
+users = (1..NUM).map { |i| "user-#{i}" }
+items = (1..NUM).map { |i| "item-#{i}" }
+purchases = []
+
+users.each do |user_id|
+  purchased = items.select { |_| rand(0.0..1.0) < PROBABILITY_PURCHASED }
+  purchased.each { |item_id| purchases.push(
+
+                AddPurchase.new(user_id, item_id,'cascadeCreate' => true)
+                                                  # Use cascadeCreate to create the
+                                                  # yet non-existing users and items
+                )}
+
 end
 
-# Use Recombee recommender
-client = RecombeeClient.new('client-test', 'jGGQ6ZKa8rQ1zTAyxTc0EMn55YPF7FJLUtaMLhbsGxmvwxgTwXYqmUk5xVZFw98L')
 begin
-  # Send the data to Recombee, use Batch for faster processing
-  puts 'Send users'
-  client.send(Batch.new(my_users.map { |userId| AddUser.new(userId) }))
-  puts 'Send items'
-  client.send(Batch.new(my_items.map { |itemId| AddItem.new(itemId) }))
-  puts 'Send purchases'
-  client.send(Batch.new(my_purchases.map { |p| AddPurchase.new(p['userId'], p['itemId']) }))
+  # Send the data to Recombee, use Batch for faster processing of larger data
+  client.send(Batch.new(purchases))
   
   # Get recommendations for user 'user-25'
-  puts 'Recommend for a user'
-  recommended = client.send(UserBasedRecommendation.new('user-25', 5, 'rotationRate' => 0))
-  puts "Recommended items: #{recommended}"
+  recommended = client.send(UserBasedRecommendation.new('user-25', 5))
+  puts "Recommended items for user-25: #{recommended}"
 rescue APIError => e
   puts e
+  # Use fallback
 end
 ```
 
@@ -71,7 +72,8 @@ NUM = 100
 PROBABILITY_PURCHASED = 0.1
 
 client = RecombeeClient.new('client-test', 'jGGQ6ZKa8rQ1zTAyxTc0EMn55YPF7FJLUtaMLhbsGxmvwxgTwXYqmUk5xVZFw98L')
-client.send(ResetDatabase.new)
+client.send(ResetDatabase.new) # Clear everything from the database
+
 # We will use computers as items in this example
 # Computers have three properties 
 #   - price (floating point number)
@@ -82,6 +84,7 @@ client.send(ResetDatabase.new)
 client.send(AddItemProperty.new('price', 'double'))
 client.send(AddItemProperty.new('num-cores', 'int'))
 client.send(AddItemProperty.new('description', 'string'))
+client.send(AddItemProperty.new('time', 'timestamp'))
 
 # Prepare requests for setting a catalog of computers
 requests = (1..NUM).map do |i|
@@ -92,14 +95,18 @@ requests = (1..NUM).map do |i|
         'price' => rand(15000.0 .. 25000.0),
         'num-cores' => rand(1..8),
         'description' => 'Great computer',
-        '!cascadeCreate' => true # Use !cascadeCreate for creating item
+        'time' => DateTime.now
+      },
+      #optional parameters:
+      {
+        'cascadeCreate' => true  # Use cascadeCreate for creating item
                                  # with given itemId, if it doesn't exist
       }
     )
 end
 
 # Send catalog to the recommender system
-client.send(Batch.new(requests))
+puts client.send(Batch.new(requests))
 
 # Prepare some purchases of items by users
 requests = []

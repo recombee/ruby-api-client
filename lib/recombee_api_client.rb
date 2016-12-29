@@ -17,6 +17,8 @@ module RecombeeApiClient
   class RecombeeClient
     include HTTParty
 
+    BATCH_MAX_SIZE = 10000
+
     ##
     #   - +account+ -> Name of your account at Recombee
     #   - +token+ -> Secret token obtained from Recombee for signing requests
@@ -33,6 +35,9 @@ module RecombeeApiClient
     ##
     #   - +request+ -> ApiRequest to be sent to Recombee recommender
     def send(request)
+
+      return send_multipart_batch(request) if request.kind_of? Batch and request.requests.size > BATCH_MAX_SIZE
+
       timeout = request.timeout / 1000
       uri = process_request_uri(request)
       uri = sign_url(uri)
@@ -92,6 +97,12 @@ module RecombeeApiClient
       status_code = response.code
       return if status_code == 200 || status_code == 201
       fail ResponseError.new(request, status_code, response.body)
+    end
+
+    def send_multipart_batch(request)
+      requests_parts = request.requests.each_slice(BATCH_MAX_SIZE)
+      responses = requests_parts.map {|rqs| Batch.new(rqs)}.map{|batch| send(batch)}
+      responses.inject([]){|result,resp| result + resp}
     end
 
     def process_request_uri(request)

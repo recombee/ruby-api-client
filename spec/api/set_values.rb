@@ -27,6 +27,11 @@ include_context 'set environment'
     resp = @client.send(req)
   end
 
+  it 'does not fail with cascadeCreate optional parameter' do
+    req = described_class.new('new_entity2',{'int_property' => 5,'str_property' => 'test'},{'cascadeCreate' => true})
+    resp = @client.send(req)
+  end
+
   it 'fails with nonexisting entity' do
     req = described_class.new('nonexisting',{'int_property' => 5})
     expect { @client.send(req) }.to raise_exception { |exception|
