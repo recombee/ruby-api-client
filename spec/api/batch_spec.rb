@@ -34,4 +34,14 @@ describe RecombeeApiClient::Batch do
     expect(repl[9]['json'].sort).to match_array []
   end
 
+  it 'send large multi-part batch' do
+
+    NUM = 23648
+    reqs = (1..NUM).map{|i| AddItem.new("item-#{i}")}
+    repl = @client.send(Batch.new(reqs))
+    expect(repl.size).to eq(NUM)
+
+    repl.each{|r| expect(r['code']).to eq(201)}
+
+  end
 end
