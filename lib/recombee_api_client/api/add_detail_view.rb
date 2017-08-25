@@ -48,9 +48,9 @@ module RecombeeApiClient
       p = Hash.new
       p['userId'] = @user_id
       p['itemId'] = @item_id
-      p['timestamp'] = @optional['timestamp'] if @optional['timestamp']
-      p['duration'] = @optional['duration'] if @optional['duration']
-      p['cascadeCreate'] = @optional['cascadeCreate'] if @optional['cascadeCreate']
+      p['timestamp'] = @optional['timestamp'] if @optional.include? 'timestamp'
+      p['duration'] = @optional['duration'] if @optional.include? 'duration'
+      p['cascadeCreate'] = @optional['cascadeCreate'] if @optional.include? 'cascadeCreate'
       p
     end
   

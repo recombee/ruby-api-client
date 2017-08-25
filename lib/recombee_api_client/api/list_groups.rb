@@ -16,7 +16,7 @@ module RecombeeApiClient
   ##
   #
     def initialize()
-      @timeout = 30000
+      @timeout = 239000
       @ensure_https = false
     end
   

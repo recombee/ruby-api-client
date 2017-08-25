@@ -18,6 +18,7 @@ module RecombeeApiClient
     include HTTParty
 
     BATCH_MAX_SIZE = 10000
+    USER_AGENT = {'User-Agent' => 'recombee-ruby-api-client/1.4.0'}
 
     ##
     #   - +account+ -> Name of your account at Recombee
@@ -63,13 +64,15 @@ module RecombeeApiClient
     private
 
     def put(request, uri, timeout)
-      response = self.class.put(uri, timeout: timeout)
+      response = self.class.put(uri, body: request.body_parameters.to_json, 
+                        headers: { 'Content-Type' => 'application/json' }.merge(USER_AGENT),
+                        timeout: timeout)
       check_errors(response, request)
       response.body
     end
 
     def get(request, uri, timeout)
-      response = self.class.get(uri, timeout: timeout)
+      response = self.class.get(uri, timeout: timeout, headers: USER_AGENT)
       check_errors(response, request)
       JSON.parse(response.body)
     end
@@ -77,7 +80,7 @@ module RecombeeApiClient
     def post(request, uri, timeout)
       # pass arguments in body
       response = self.class.post(uri, body: request.body_parameters.to_json, 
-                        headers: { 'Content-Type' => 'application/json' },
+                        headers: { 'Content-Type' => 'application/json' }.merge(USER_AGENT),
                         timeout: timeout)
       check_errors(response, request)
       begin
@@ -88,7 +91,7 @@ module RecombeeApiClient
     end
 
     def delete(request, uri, timeout)
-      response = self.class.delete(uri, timeout: timeout)
+      response = self.class.delete(uri, timeout: timeout, headers: USER_AGENT)
       check_errors(response, request)
       response.body
     end

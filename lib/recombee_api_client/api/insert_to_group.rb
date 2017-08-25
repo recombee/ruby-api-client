@@ -46,7 +46,7 @@ module RecombeeApiClient
       p = Hash.new
       p['itemType'] = @item_type
       p['itemId'] = @item_id
-      p['cascadeCreate'] = @optional['cascadeCreate'] if @optional['cascadeCreate']
+      p['cascadeCreate'] = @optional['cascadeCreate'] if @optional.include? 'cascadeCreate'
       p
     end
   

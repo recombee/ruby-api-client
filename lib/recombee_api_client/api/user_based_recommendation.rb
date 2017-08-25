@@ -9,8 +9,10 @@ module RecombeeApiClient
   ##
   #Based on user's past interactions (purchases, ratings, etc.) with the items, recommends top-N items that are most likely to be of high value for a given user.
   #
+  #It is also possible to use POST HTTP method (for example in case of very long ReQL filter) - query parameters then become body parameters.
+  #
   class UserBasedRecommendation < ApiRequest
-    attr_reader :user_id, :count, :filter, :booster, :allow_nonexistent, :cascade_create, :scenario, :return_properties, :included_properties, :diversity, :min_relevance, :rotation_rate, :rotation_time
+    attr_reader :user_id, :count, :filter, :booster, :allow_nonexistent, :cascade_create, :scenario, :return_properties, :included_properties, :diversity, :min_relevance, :rotation_rate, :rotation_time, :expert_settings
     attr_accessor :timeout
     attr_accessor :ensure_https
   
@@ -24,7 +26,7 @@ module RecombeeApiClient
   #   - +booster+ -> Number-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to boost recommendation rate of some items based on the values of their attributes.
   #   - +allowNonexistent+ -> If the user does not exist in the database, returns a list of non-personalized recommendations instead of causing HTTP 404 error. It doesn't create the user in the database.
   #   - +cascadeCreate+ -> If the user does not exist in the database, returns a list of non-personalized recommendations and creates the user in the database. This allows for example rotations in the following recommendations for that user, as the user will be already known to the system.
-  #   - +scenario+ -> Scenario defines a particular application of recommendations. It can be for example "homepage" or "cart". The AI which optimizes models in order to get the best results may optimize different scenarios separately, or even use different models in each of the scenarios.
+  #   - +scenario+ -> Scenario defines a particular application of recommendations. It can be for example "homepage", "cart" or "emailing". You can see each scenario in the UI separately, so you can check how well each application performs. The AI which optimizes models in order to get the best results may optimize different scenarios separately, or even use different models in each of the scenarios.
   #   - +returnProperties+ -> With `returnProperties=true`, property values of the recommended items are returned along with their IDs in a JSON dictionary. The acquired property values can be used for easy displaying of the recommended items to the user. 
   #
   #Example response:
@@ -71,7 +73,9 @@ module RecombeeApiClient
   #
   #   - +rotationRate+ -> **Expert option** If your users browse the system in real-time, it may easily happen that you wish to offer them recommendations multiple times. Here comes the question: how much should the recommendations change? Should they remain the same, or should they rotate? Recombee API allows you to control this per-request in backward fashion. You may penalize an item for being recommended in the near past. For the specific user, `rotationRate=1` means maximal rotation, `rotationRate=0` means absolutely no rotation. You may also use, for example `rotationRate=0.2` for only slight rotation of recommended items.
   #
-  #   - +rotationTime+ -> **Expert option** Taking *rotationRate* into account, specifies how long time it takes to an item to fully recover from the penalization. For example, `rotationTime=7200.0` means that items recommended more than 2 hours ago are definitely not penalized anymore. Currently, the penalization is linear, so for `rotationTime=7200.0`, an item is still penalized by `0.5` to the user after 1 hour.
+  #   - +rotationTime+ -> **Expert option** Taking *rotationRate* into account, specifies how long time it takes to an item to recover from the penalization. For example, `rotationTime=7200.0` means that items recommended less than 2 hours ago are penalized.
+  #
+  #   - +expertSettings+ -> Dictionary of custom options.
   #
   #
     def initialize(user_id, count, optional = {})
@@ -88,22 +92,36 @@ module RecombeeApiClient
       @min_relevance = optional['minRelevance']
       @rotation_rate = optional['rotationRate']
       @rotation_time = optional['rotationTime']
+      @expert_settings = optional['expertSettings']
       @optional = optional
       @timeout = 3000
       @ensure_https = false
       @optional.each do |par, _|
-        fail UnknownOptionalParameter.new(par) unless ["filter","booster","allowNonexistent","cascadeCreate","scenario","returnProperties","includedProperties","diversity","minRelevance","rotationRate","rotationTime"].include? par
+        fail UnknownOptionalParameter.new(par) unless ["filter","booster","allowNonexistent","cascadeCreate","scenario","returnProperties","includedProperties","diversity","minRelevance","rotationRate","rotationTime","expertSettings"].include? par
       end
     end
   
     # HTTP method
     def method
-      :get
+      :post
     end
   
     # Values of body parameters as a Hash
     def body_parameters
       p = Hash.new
+      p['count'] = @count
+      p['filter'] = @optional['filter'] if @optional.include? 'filter'
+      p['booster'] = @optional['booster'] if @optional.include? 'booster'
+      p['allowNonexistent'] = @optional['allowNonexistent'] if @optional.include? 'allowNonexistent'
+      p['cascadeCreate'] = @optional['cascadeCreate'] if @optional.include? 'cascadeCreate'
+      p['scenario'] = @optional['scenario'] if @optional.include? 'scenario'
+      p['returnProperties'] = @optional['returnProperties'] if @optional.include? 'returnProperties'
+      p['includedProperties'] = @optional['includedProperties'] if @optional.include? 'includedProperties'
+      p['diversity'] = @optional['diversity'] if @optional.include? 'diversity'
+      p['minRelevance'] = @optional['minRelevance'] if @optional.include? 'minRelevance'
+      p['rotationRate'] = @optional['rotationRate'] if @optional.include? 'rotationRate'
+      p['rotationTime'] = @optional['rotationTime'] if @optional.include? 'rotationTime'
+      p['expertSettings'] = @optional['expertSettings'] if @optional.include? 'expertSettings'
       p
     end
   
@@ -111,18 +129,6 @@ module RecombeeApiClient
     # name of parameter => value of the parameter
     def query_parameters
       params = {}
-      params['count'] = @count
-      params['filter'] = @optional['filter'] if @optional['filter']
-      params['booster'] = @optional['booster'] if @optional['booster']
-      params['allowNonexistent'] = @optional['allowNonexistent'] if @optional['allowNonexistent']
-      params['cascadeCreate'] = @optional['cascadeCreate'] if @optional['cascadeCreate']
-      params['scenario'] = @optional['scenario'] if @optional['scenario']
-      params['returnProperties'] = @optional['returnProperties'] if @optional['returnProperties']
-      params['includedProperties'] = @optional['includedProperties'] if @optional['includedProperties']
-      params['diversity'] = @optional['diversity'] if @optional['diversity']
-      params['minRelevance'] = @optional['minRelevance'] if @optional['minRelevance']
-      params['rotationRate'] = @optional['rotationRate'] if @optional['rotationRate']
-      params['rotationTime'] = @optional['rotationTime'] if @optional['rotationTime']
       params
     end
   

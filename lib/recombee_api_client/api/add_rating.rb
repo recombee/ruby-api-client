@@ -49,8 +49,8 @@ module RecombeeApiClient
       p['userId'] = @user_id
       p['itemId'] = @item_id
       p['rating'] = @rating
-      p['timestamp'] = @optional['timestamp'] if @optional['timestamp']
-      p['cascadeCreate'] = @optional['cascadeCreate'] if @optional['cascadeCreate']
+      p['timestamp'] = @optional['timestamp'] if @optional.include? 'timestamp'
+      p['cascadeCreate'] = @optional['cascadeCreate'] if @optional.include? 'cascadeCreate'
       p
     end
   
