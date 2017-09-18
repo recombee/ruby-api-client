@@ -37,7 +37,8 @@ RSpec.shared_context 'set interactions', a: :b do
         AddPurchase.new('user', 'item', 'timestamp' => 0),
         AddRating.new('user', 'item', -1, 'timestamp' => 0),
         AddCartAddition.new('user', 'item', 'timestamp' => 0),
-        AddBookmark.new('user', 'item', 'timestamp' => 0)
+        AddBookmark.new('user', 'item', 'timestamp' => 0),
+        SetViewPortion.new('user', 'item', 1, 'timestamp' => 0)
     ])
 
     @client.send(requests)
