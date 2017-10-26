@@ -13,7 +13,7 @@ module RecombeeApiClient
   #If you send new request with the same (`userId`, `itemId`, `sessionId`), the portion gets updated.
   #
   class SetViewPortion < ApiRequest
-    attr_reader :user_id, :item_id, :session_id, :timestamp, :portion, :cascade_create
+    attr_reader :user_id, :item_id, :portion, :session_id, :timestamp, :cascade_create
     attr_accessor :timeout
     attr_accessor :ensure_https
   

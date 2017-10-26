@@ -44,3 +44,26 @@ RSpec.shared_context 'set interactions', a: :b do
     @client.send(requests)
   end
 end
+
+RSpec.shared_context 'set recomm entities', a: :b do
+
+  before(:each) do
+    num = 100
+    probability_purchased = 0.1
+
+    my_users = (1..num).map { |i| "user-#{i}" }
+    my_items = (1..num).map { |i| "item-#{i}" }
+
+    my_purchases = []
+    my_users.each do |user|
+      p = my_items.select { |_| rand(0.0..1.0) < probability_purchased }
+      p.each { |item| my_purchases.push('userId' => user, 'itemId' => item) }
+    end
+
+    @client.send(Batch.new(my_users.map { |userId| AddUser.new(userId) }))
+    @client.send(Batch.new([AddItemProperty.new('answer', 'int'), AddItemProperty.new('id2', 'string'), AddItemProperty.new('empty', 'string')]))
+    @client.send(Batch.new(my_items.map { |itemId| SetItemValues.new(itemId, {'answer' => 42, 'id2' => itemId, '!cascadeCreate' => true}) }))
+    @client.send(Batch.new(my_purchases.map { |p| AddPurchase.new(p['userId'], p['itemId'], 'timestamp' => 0) }))
+  end
+
+end

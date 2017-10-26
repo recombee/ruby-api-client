@@ -18,7 +18,7 @@ module RecombeeApiClient
     include HTTParty
 
     BATCH_MAX_SIZE = 10000
-    USER_AGENT = {'User-Agent' => 'recombee-ruby-api-client/1.5.0'}
+    USER_AGENT = {'User-Agent' => 'recombee-ruby-api-client/1.6.0'}
 
     ##
     #   - +account+ -> Name of your account at Recombee

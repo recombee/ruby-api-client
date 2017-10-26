@@ -67,7 +67,7 @@ module RecombeeApiClient
       @return_properties = optional['returnProperties']
       @included_properties = optional['includedProperties']
       @optional = optional
-      @timeout = 600000
+      @timeout = 100000
       @ensure_https = false
       @optional.each do |par, _|
         fail UnknownOptionalParameter.new(par) unless ["filter","count","offset","returnProperties","includedProperties"].include? par
