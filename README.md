@@ -29,7 +29,7 @@ Or install it yourself as:
 require 'recombee_api_client'
 include RecombeeApiClient
 
-client = RecombeeClient.new('client-test', 'jGGQ6ZKa8rQ1zTAyxTc0EMn55YPF7FJLUtaMLhbsGxmvwxgTwXYqmUk5xVZFw98L')
+client = RecombeeClient('--my-database-id--', '--my-secret-token--')
 
 # Generate some random purchases of items by users
 NUM = 100
@@ -55,7 +55,7 @@ begin
   client.send(Batch.new(purchases))
   
   # Get recommendations for user 'user-25'
-  recommended = client.send(UserBasedRecommendation.new('user-25', 5))
+  recommended = client.send(RecommendItemsToUser.new('user-25', 5))
   puts "Recommended items for user-25: #{recommended}"
 rescue APIError => e
   puts e
@@ -71,7 +71,7 @@ include RecombeeApiClient
 NUM = 100
 PROBABILITY_PURCHASED = 0.1
 
-client = RecombeeClient.new('client-test', 'jGGQ6ZKa8rQ1zTAyxTc0EMn55YPF7FJLUtaMLhbsGxmvwxgTwXYqmUk5xVZFw98L')
+client = RecombeeClient('--my-database-id--', '--my-secret-token--')
 client.send(ResetDatabase.new) # Clear everything from the database
 
 # We will use computers as items in this example
@@ -121,21 +121,19 @@ end
 client.send(Batch.new(requests))
 
 # Get 5 recommendations for user-42, who is currently viewing computer-6
-recommended = client.send(ItemBasedRecommendation.new('computer-6', 5, 'targetUserId' => 'user-42') )
+recommended = client.send(RecommendItemsToItem.new('computer-6', 'user-42', 5) )
 puts "Recommended items: #{recommended}"
 
-# Get 5 recommendations for user-42, but recommend only computers that
-# have at least 3 cores
+# Recommend only computers that have at least 3 cores
 recommended = client.send(
-  ItemBasedRecommendation.new('computer-6', 5, {'targetUserId' => 'user-42', 'filter' => "'num-cores'>=3"})
+  RecommendItemsToItem.new('computer-6', 'user-42', 5, {'filter' => "'num-cores'>=3"})
   )
 puts "Recommended items with at least 3 processor cores: #{recommended}"
 
-# Get 5 recommendations for user-42, but recommend only items that
-# are more expensive then currently viewed item (up-sell)
+# Recommend only items thatare more expensive then currently viewed item (up-sell)
 recommended = client.send(
-  ItemBasedRecommendation.new('computer-6', 5,
-    {'targetUserId' => 'user-42', 'filter' => "'price' > context_item[\"price\"]"})
+  RecommendItemsToItem.new('computer-6', 'user-42', 5,
+    {'filter' => "'price' > context_item[\"price\"]"})
   )
 puts "Recommended up-sell items: #{recommended}"
 ```
@@ -151,14 +149,14 @@ Example:
 
 begin
   recommended = client.send(
-  ItemBasedRecommendation.new('computer-6', 5,
-    {'targetUserId' => 'user-42', 'filter' => "'price' > context_item[\"price\"]"})
+    RecommendItemsToItem.new('computer-6', 'user-42', 5,
+    {'filter' => "'price' > context_item[\"price\"]"})
   )
 rescue ResponseError => e
-  #Handle errorneous request => use fallback
+  # Handle errorneous request => use fallback
 rescue ApiTimeout => e
-  #Handle timeout => use fallback
+  # Handle timeout => use fallback
 rescue APIError => e
-  #APIError is parent of both ResponseError and ApiTimeout
+  # APIError is parent of both ResponseError and ApiTimeout
 end
 ```

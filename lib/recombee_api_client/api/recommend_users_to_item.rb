@@ -7,8 +7,6 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #This feature is currently in beta.
-  #
   #Recommend users that are likely to be interested in a given item.
   #
   #It is also possible to use POST HTTP method (for example in case of very long ReQL filter) - query parameters then become body parameters.
@@ -33,7 +31,7 @@ module RecombeeApiClient
   #Example response:
   #```
   #  {
-  #    "recommId": "9eeebc318508302529e3241f4570834d",
+  #    "recommId": "039b71dc-b9cc-4645-a84f-62b841eecfce",
   #    "recomms":
   #      [
   #        {
@@ -59,7 +57,7 @@ module RecombeeApiClient
   #Example response for `includedProperties=country`:
   #```
   #  {
-  #    "recommId": "d4c826635efc3e01a83470008c5697f1",
+  #    "recommId": "b2b355dd-972a-4728-9c6b-2dc229db0678",
   #    "recomms":
   #      [
   #        {
@@ -95,7 +93,7 @@ module RecombeeApiClient
       @diversity = optional['diversity']
       @expert_settings = optional['expertSettings']
       @optional = optional
-      @timeout = 3000
+      @timeout = 50000
       @ensure_https = false
       @optional.each do |par, _|
         fail UnknownOptionalParameter.new(par) unless ["filter","booster","cascadeCreate","scenario","returnProperties","includedProperties","diversity","expertSettings"].include? par

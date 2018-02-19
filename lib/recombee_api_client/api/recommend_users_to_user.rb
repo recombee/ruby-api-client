@@ -7,8 +7,6 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #This feature is currently in beta.
-  #
   #Get similar users as some given user, based on the user's past interactions (purchases, ratings, etc.) and values of properties.
   #
   #It is also possible to use POST HTTP method (for example in case of very long ReQL filter) - query parameters then become body parameters.
@@ -33,7 +31,7 @@ module RecombeeApiClient
   #Example response:
   #```
   #  {
-  #    "recommId": "32fc671480eb29d843e47def43503992",
+  #    "recommId": "9cb9c55d-50ba-4478-84fd-ab456136156e",
   #    "recomms": 
   #      [
   #        {
@@ -59,7 +57,7 @@ module RecombeeApiClient
   #Example response for `includedProperties=country`:
   #```
   #  {
-  #    "recommId": "27d81ade643621f45cc6ba5d30d7d683",
+  #    "recommId": "b326d82d-5d57-4b45-b362-c9d6f0895855",
   #    "recomms":
   #      [
   #        {
@@ -104,7 +102,7 @@ module RecombeeApiClient
       @rotation_time = optional['rotationTime']
       @expert_settings = optional['expertSettings']
       @optional = optional
-      @timeout = 3000
+      @timeout = 50000
       @ensure_https = false
       @optional.each do |par, _|
         fail UnknownOptionalParameter.new(par) unless ["filter","booster","cascadeCreate","scenario","returnProperties","includedProperties","diversity","minRelevance","rotationRate","rotationTime","expertSettings"].include? par
