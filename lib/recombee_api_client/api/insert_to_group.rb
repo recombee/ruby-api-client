@@ -27,6 +27,7 @@ module RecombeeApiClient
       @group_id = group_id
       @item_type = item_type
       @item_id = item_id
+      optional = normalize_optional(optional)
       @cascade_create = optional['cascadeCreate']
       @optional = optional
       @timeout = 1000

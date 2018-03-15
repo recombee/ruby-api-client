@@ -16,6 +16,7 @@ module RecombeeApiClient
     #
     def initialize(requests, optional = {})
       @requests = requests
+      optional = normalize_optional(optional)
       @optional = optional
       @body_parameters = requests_to_batch_hash
       @timeout = requests.map{|r| r.timeout}.reduce(:+)

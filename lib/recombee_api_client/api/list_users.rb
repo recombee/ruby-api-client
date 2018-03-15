@@ -55,6 +55,7 @@ module RecombeeApiClient
   #
   #
     def initialize(optional = {})
+      optional = normalize_optional(optional)
       @filter = optional['filter']
       @count = optional['count']
       @offset = optional['offset']

@@ -90,6 +90,7 @@ module RecombeeApiClient
     def initialize(user_id, count, optional = {})
       @user_id = user_id
       @count = count
+      optional = normalize_optional(optional)
       @filter = optional['filter']
       @booster = optional['booster']
       @cascade_create = optional['cascadeCreate']

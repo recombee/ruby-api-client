@@ -117,6 +117,7 @@ module RecombeeApiClient
       @item_id = item_id
       @target_user_id = target_user_id
       @count = count
+      optional = normalize_optional(optional)
       @user_impact = optional['userImpact']
       @filter = optional['filter']
       @booster = optional['booster']
