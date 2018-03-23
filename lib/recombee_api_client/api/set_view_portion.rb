@@ -32,6 +32,7 @@ module RecombeeApiClient
       @user_id = user_id
       @item_id = item_id
       @portion = portion
+      optional = normalize_optional(optional)
       @session_id = optional['sessionId']
       @timestamp = optional['timestamp']
       @cascade_create = optional['cascadeCreate']

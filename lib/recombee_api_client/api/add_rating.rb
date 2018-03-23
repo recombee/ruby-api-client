@@ -28,6 +28,7 @@ module RecombeeApiClient
       @user_id = user_id
       @item_id = item_id
       @rating = rating
+      optional = normalize_optional(optional)
       @timestamp = optional['timestamp']
       @cascade_create = optional['cascadeCreate']
       @optional = optional

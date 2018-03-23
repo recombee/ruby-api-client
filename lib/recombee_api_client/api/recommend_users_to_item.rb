@@ -84,6 +84,7 @@ module RecombeeApiClient
     def initialize(item_id, count, optional = {})
       @item_id = item_id
       @count = count
+      optional = normalize_optional(optional)
       @filter = optional['filter']
       @booster = optional['booster']
       @cascade_create = optional['cascadeCreate']

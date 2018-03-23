@@ -28,6 +28,7 @@ module RecombeeApiClient
     def initialize(target_user_id, source_user_id, optional = {})
       @target_user_id = target_user_id
       @source_user_id = source_user_id
+      optional = normalize_optional(optional)
       @cascade_create = optional['cascadeCreate']
       @optional = optional
       @timeout = 10000

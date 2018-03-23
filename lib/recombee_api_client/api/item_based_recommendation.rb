@@ -95,6 +95,7 @@ module RecombeeApiClient
     def initialize(item_id, count, optional = {})
       @item_id = item_id
       @count = count
+      optional = normalize_optional(optional)
       @target_user_id = optional['targetUserId']
       @user_impact = optional['userImpact']
       @filter = optional['filter']
