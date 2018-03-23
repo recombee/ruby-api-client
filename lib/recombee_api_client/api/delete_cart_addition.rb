@@ -25,6 +25,7 @@ module RecombeeApiClient
     def initialize(user_id, item_id, optional = {})
       @user_id = user_id
       @item_id = item_id
+      optional = normalize_optional(optional)
       @timestamp = optional['timestamp']
       @optional = optional
       @timeout = 1000

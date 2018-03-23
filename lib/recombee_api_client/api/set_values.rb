@@ -27,6 +27,7 @@ module RecombeeApiClient
   #
     def initialize( values, optional = {})
       @values = values
+      optional = normalize_optional(optional)
       @cascade_create = optional['cascadeCreate']
       @optional = optional
       @optional.each do |par, _|
