@@ -19,8 +19,8 @@ module RecombeeApiClient
   
   ##
   # * *Required arguments*
-  #   - +target_user_id+ -> ID of the source user.
-  #   - +source_user_id+ -> ID of the target user.
+  #   - +target_user_id+ -> ID of the targer user.
+  #   - +source_user_id+ -> ID of the source user.
   #
   # * *Optional arguments (given as hash optional)*
   #   - +cascadeCreate+ -> Sets whether the user *targetUserId* should be created if not present in the database.
