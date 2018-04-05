@@ -18,7 +18,7 @@ module RecombeeApiClient
   # * *Required arguments*
   #   - +property_name+ -> Name of the item property to be created. Currently, the following names are reserved:`id`, `itemid`, case insensitively. Also, the length of the property name must not exceed 63 characters.
   #
-  #   - +type+ -> Value type of the item property to be created. One of: `int`, `double`, `string`, `boolean`, `timestamp`, `set`
+  #   - +type+ -> Value type of the item property to be created. One of: `int`, `double`, `string`, `boolean`, `timestamp`, `set`, `image` or `imageList`.
   #
   #
     def initialize(property_name, type)

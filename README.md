@@ -75,16 +75,19 @@ client = RecombeeClient('--my-database-id--', '--my-secret-token--')
 client.send(ResetDatabase.new) # Clear everything from the database
 
 # We will use computers as items in this example
-# Computers have three properties 
+# Computers have five properties 
 #   - price (floating point number)
 #   - number of processor cores (integer number)
 #   - description (string)
+#   - date from which it is in stock (timestamp)
+#   - image (url of computer's photo)
 
 # Add properties of items
 client.send(AddItemProperty.new('price', 'double'))
 client.send(AddItemProperty.new('num-cores', 'int'))
 client.send(AddItemProperty.new('description', 'string'))
-client.send(AddItemProperty.new('time', 'timestamp'))
+client.send(AddItemProperty.new('in_stock_from', 'timestamp'))
+client.send(AddItemProperty.new('image', 'image'))
 
 # Prepare requests for setting a catalog of computers
 requests = (1..NUM).map do |i|
@@ -95,7 +98,8 @@ requests = (1..NUM).map do |i|
         'price' => rand(15000.0 .. 25000.0),
         'num-cores' => rand(1..8),
         'description' => 'Great computer',
-        'time' => DateTime.now
+        'in_stock_from' => DateTime.now,
+        'image' => "http://examplesite.com/products/computer-#{i}.jpg"
       },
       #optional parameters:
       {

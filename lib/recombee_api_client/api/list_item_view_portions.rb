@@ -7,8 +7,6 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #The view portions feature is currently experimental.
-  #
   #List all the view portions of an item ever submitted by different users.
   #
   class ListItemViewPortions < ApiRequest

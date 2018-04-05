@@ -7,8 +7,6 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #The view portions feature is currently experimental.
-  #
   #Deletes an existing view portion specified by (`userId`, `itemId`, `sessionId`) from the database.
   #
   class DeleteViewPortion < ApiRequest
