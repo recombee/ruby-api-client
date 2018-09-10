@@ -10,7 +10,7 @@ module RecombeeApiClient
   #Adds a bookmark of a given item made by a given user.
   #
   class AddBookmark < ApiRequest
-    attr_reader :user_id, :item_id, :timestamp, :cascade_create
+    attr_reader :user_id, :item_id, :timestamp, :cascade_create, :recomm_id
     attr_accessor :timeout
     attr_accessor :ensure_https
   
@@ -22,6 +22,7 @@ module RecombeeApiClient
   # * *Optional arguments (given as hash optional)*
   #   - +timestamp+ -> UTC timestamp of the bookmark as ISO8601-1 pattern or UTC epoch time. The default value is the current time.
   #   - +cascadeCreate+ -> Sets whether the given user/item should be created if not present in the database.
+  #   - +recommId+ -> If this bookmark is based on a recommendation request, `recommId` is the id of the clicked recommendation.
   #
     def initialize(user_id, item_id, optional = {})
       @user_id = user_id
@@ -29,11 +30,12 @@ module RecombeeApiClient
       optional = normalize_optional(optional)
       @timestamp = optional['timestamp']
       @cascade_create = optional['cascadeCreate']
+      @recomm_id = optional['recommId']
       @optional = optional
       @timeout = 1000
       @ensure_https = false
       @optional.each do |par, _|
-        fail UnknownOptionalParameter.new(par) unless ["timestamp","cascadeCreate"].include? par
+        fail UnknownOptionalParameter.new(par) unless ["timestamp","cascadeCreate","recommId"].include? par
       end
     end
   
@@ -49,6 +51,7 @@ module RecombeeApiClient
       p['itemId'] = @item_id
       p['timestamp'] = @optional['timestamp'] if @optional.include? 'timestamp'
       p['cascadeCreate'] = @optional['cascadeCreate'] if @optional.include? 'cascadeCreate'
+      p['recommId'] = @optional['recommId'] if @optional.include? 'recommId'
       p
     end
   

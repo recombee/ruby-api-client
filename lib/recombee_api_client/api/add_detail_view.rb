@@ -10,7 +10,7 @@ module RecombeeApiClient
   #Adds a detail view of a given item made by a given user.
   #
   class AddDetailView < ApiRequest
-    attr_reader :user_id, :item_id, :timestamp, :duration, :cascade_create
+    attr_reader :user_id, :item_id, :timestamp, :duration, :cascade_create, :recomm_id
     attr_accessor :timeout
     attr_accessor :ensure_https
   
@@ -23,6 +23,7 @@ module RecombeeApiClient
   #   - +timestamp+ -> UTC timestamp of the view as ISO8601-1 pattern or UTC epoch time. The default value is the current time.
   #   - +duration+ -> Duration of the view
   #   - +cascadeCreate+ -> Sets whether the given user/item should be created if not present in the database.
+  #   - +recommId+ -> If this detail view is based on a recommendation request, `recommId` is the id of the clicked recommendation.
   #
     def initialize(user_id, item_id, optional = {})
       @user_id = user_id
@@ -31,11 +32,12 @@ module RecombeeApiClient
       @timestamp = optional['timestamp']
       @duration = optional['duration']
       @cascade_create = optional['cascadeCreate']
+      @recomm_id = optional['recommId']
       @optional = optional
       @timeout = 1000
       @ensure_https = false
       @optional.each do |par, _|
-        fail UnknownOptionalParameter.new(par) unless ["timestamp","duration","cascadeCreate"].include? par
+        fail UnknownOptionalParameter.new(par) unless ["timestamp","duration","cascadeCreate","recommId"].include? par
       end
     end
   
@@ -52,6 +54,7 @@ module RecombeeApiClient
       p['timestamp'] = @optional['timestamp'] if @optional.include? 'timestamp'
       p['duration'] = @optional['duration'] if @optional.include? 'duration'
       p['cascadeCreate'] = @optional['cascadeCreate'] if @optional.include? 'cascadeCreate'
+      p['recommId'] = @optional['recommId'] if @optional.include? 'recommId'
       p
     end
   

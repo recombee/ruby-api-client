@@ -11,7 +11,7 @@ module RecombeeApiClient
   #If you send new request with the same (`userId`, `itemId`, `sessionId`), the portion gets updated.
   #
   class SetViewPortion < ApiRequest
-    attr_reader :user_id, :item_id, :portion, :session_id, :timestamp, :cascade_create
+    attr_reader :user_id, :item_id, :portion, :session_id, :timestamp, :cascade_create, :recomm_id
     attr_accessor :timeout
     attr_accessor :ensure_https
   
@@ -25,6 +25,7 @@ module RecombeeApiClient
   #   - +sessionId+ -> ID of session in which the user viewed the item. Default is `null` (`None`, `nil`, `NULL` etc. depending on language).
   #   - +timestamp+ -> UTC timestamp of the rating as ISO8601-1 pattern or UTC epoch time. The default value is the current time.
   #   - +cascadeCreate+ -> Sets whether the given user/item should be created if not present in the database.
+  #   - +recommId+ -> If this view portion is based on a recommendation request, `recommId` is the id of the clicked recommendation.
   #
     def initialize(user_id, item_id, portion, optional = {})
       @user_id = user_id
@@ -34,11 +35,12 @@ module RecombeeApiClient
       @session_id = optional['sessionId']
       @timestamp = optional['timestamp']
       @cascade_create = optional['cascadeCreate']
+      @recomm_id = optional['recommId']
       @optional = optional
       @timeout = 1000
       @ensure_https = false
       @optional.each do |par, _|
-        fail UnknownOptionalParameter.new(par) unless ["sessionId","timestamp","cascadeCreate"].include? par
+        fail UnknownOptionalParameter.new(par) unless ["sessionId","timestamp","cascadeCreate","recommId"].include? par
       end
     end
   
@@ -56,6 +58,7 @@ module RecombeeApiClient
       p['sessionId'] = @optional['sessionId'] if @optional.include? 'sessionId'
       p['timestamp'] = @optional['timestamp'] if @optional.include? 'timestamp'
       p['cascadeCreate'] = @optional['cascadeCreate'] if @optional.include? 'cascadeCreate'
+      p['recommId'] = @optional['recommId'] if @optional.include? 'recommId'
       p
     end
   

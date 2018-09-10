@@ -10,7 +10,7 @@ module RecombeeApiClient
   #Adds a cart addition of a given item made by a given user.
   #
   class AddCartAddition < ApiRequest
-    attr_reader :user_id, :item_id, :timestamp, :cascade_create, :amount, :price
+    attr_reader :user_id, :item_id, :timestamp, :cascade_create, :amount, :price, :recomm_id
     attr_accessor :timeout
     attr_accessor :ensure_https
   
@@ -24,6 +24,7 @@ module RecombeeApiClient
   #   - +cascadeCreate+ -> Sets whether the given user/item should be created if not present in the database.
   #   - +amount+ -> Amount (number) added to cart. The default is 1. For example if `user-x` adds two `item-y` during a single order (session...), the `amount` should equal to 2.
   #   - +price+ -> Price of the added item. If `amount` is greater than 1, sum of prices of all the items should be given.
+  #   - +recommId+ -> If this cart addition is based on a recommendation request, `recommId` is the id of the clicked recommendation.
   #
     def initialize(user_id, item_id, optional = {})
       @user_id = user_id
@@ -33,11 +34,12 @@ module RecombeeApiClient
       @cascade_create = optional['cascadeCreate']
       @amount = optional['amount']
       @price = optional['price']
+      @recomm_id = optional['recommId']
       @optional = optional
       @timeout = 1000
       @ensure_https = false
       @optional.each do |par, _|
-        fail UnknownOptionalParameter.new(par) unless ["timestamp","cascadeCreate","amount","price"].include? par
+        fail UnknownOptionalParameter.new(par) unless ["timestamp","cascadeCreate","amount","price","recommId"].include? par
       end
     end
   
@@ -55,6 +57,7 @@ module RecombeeApiClient
       p['cascadeCreate'] = @optional['cascadeCreate'] if @optional.include? 'cascadeCreate'
       p['amount'] = @optional['amount'] if @optional.include? 'amount'
       p['price'] = @optional['price'] if @optional.include? 'price'
+      p['recommId'] = @optional['recommId'] if @optional.include? 'recommId'
       p
     end
   

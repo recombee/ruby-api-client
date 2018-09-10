@@ -20,6 +20,22 @@ module RecombeeApiClient
   #
   #   - +type+ -> Value type of the item property to be created. One of: `int`, `double`, `string`, `boolean`, `timestamp`, `set`, `image` or `imageList`.
   #
+  #* `int`- Signed integer number.
+  #
+  #* `double` - Floating point number. It uses 64-bit base-2 format (IEEE 754 standard).
+  #
+  #* `string` - UTF-8 string.
+  #
+  #* `boolean` - *true* / *false*
+  #
+  #* `timestamp` - Value representing date and time.
+  #
+  #* `set` - Set of strings.
+  #
+  #* `image` - URL of an image (`jpeg`, `png` or `gif`).
+  #
+  #* `imageList` - List of URLs that refer to images. 
+  #
   #
     def initialize(property_name, type)
       @property_name = property_name
