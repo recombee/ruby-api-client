@@ -10,7 +10,7 @@ module RecombeeApiClient
   #Adds a purchase of a given item made by a given user.
   #
   class AddPurchase < ApiRequest
-    attr_reader :user_id, :item_id, :timestamp, :cascade_create, :amount, :price, :profit, :recomm_id
+    attr_reader :user_id, :item_id, :timestamp, :cascade_create, :amount, :price, :profit, :recomm_id, :additional_data
     attr_accessor :timeout
     attr_accessor :ensure_https
   
@@ -26,6 +26,7 @@ module RecombeeApiClient
   #   - +price+ -> Price paid by the user for the item. If `amount` is greater than 1, sum of prices of all the items should be given.
   #   - +profit+ -> Your profit from the purchased item. The profit is natural in e-commerce domain (for example if `user-x` purchases `item-y` for $100 and the gross margin is 30 %, then the profit is $30), but is applicable also in other domains (for example at a news company it may be income from displayed advertisement on article page). If `amount` is greater than 1, sum of profit of all the items should be given.
   #   - +recommId+ -> If this purchase is based on a recommendation request, `recommId` is the id of the clicked recommendation.
+  #   - +additionalData+ -> A dictionary of additional data for the interaction.
   #
     def initialize(user_id, item_id, optional = {})
       @user_id = user_id
@@ -37,11 +38,12 @@ module RecombeeApiClient
       @price = optional['price']
       @profit = optional['profit']
       @recomm_id = optional['recommId']
+      @additional_data = optional['additionalData']
       @optional = optional
       @timeout = 1000
       @ensure_https = false
       @optional.each do |par, _|
-        fail UnknownOptionalParameter.new(par) unless ["timestamp","cascadeCreate","amount","price","profit","recommId"].include? par
+        fail UnknownOptionalParameter.new(par) unless ["timestamp","cascadeCreate","amount","price","profit","recommId","additionalData"].include? par
       end
     end
   
@@ -61,6 +63,7 @@ module RecombeeApiClient
       p['price'] = @optional['price'] if @optional.include? 'price'
       p['profit'] = @optional['profit'] if @optional.include? 'profit'
       p['recommId'] = @optional['recommId'] if @optional.include? 'recommId'
+      p['additionalData'] = @optional['additionalData'] if @optional.include? 'additionalData'
       p
     end
   

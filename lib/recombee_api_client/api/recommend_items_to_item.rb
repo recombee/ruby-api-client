@@ -11,8 +11,10 @@ module RecombeeApiClient
   #
   #It is also possible to use POST HTTP method (for example in case of very long ReQL filter) - query parameters then become body parameters.
   #
+  #The returned items are sorted by relevancy (first item being the most relevant).
+  #
   class RecommendItemsToItem < ApiRequest
-    attr_reader :item_id, :target_user_id, :count, :user_impact, :filter, :booster, :cascade_create, :scenario, :return_properties, :included_properties, :diversity, :min_relevance, :rotation_rate, :rotation_time, :expert_settings
+    attr_reader :item_id, :target_user_id, :count, :user_impact, :filter, :booster, :cascade_create, :scenario, :return_properties, :included_properties, :diversity, :min_relevance, :rotation_rate, :rotation_time, :expert_settings, :return_ab_group
     attr_accessor :timeout
     attr_accessor :ensure_https
   
@@ -112,6 +114,8 @@ module RecombeeApiClient
   #
   #   - +expertSettings+ -> Dictionary of custom options.
   #
+  #   - +returnAbGroup+ -> If there is a custom AB-testing running, return name of group to which the request belongs.
+  #
   #
     def initialize(item_id, target_user_id, count, optional = {})
       @item_id = item_id
@@ -130,11 +134,12 @@ module RecombeeApiClient
       @rotation_rate = optional['rotationRate']
       @rotation_time = optional['rotationTime']
       @expert_settings = optional['expertSettings']
+      @return_ab_group = optional['returnAbGroup']
       @optional = optional
       @timeout = 3000
       @ensure_https = false
       @optional.each do |par, _|
-        fail UnknownOptionalParameter.new(par) unless ["userImpact","filter","booster","cascadeCreate","scenario","returnProperties","includedProperties","diversity","minRelevance","rotationRate","rotationTime","expertSettings"].include? par
+        fail UnknownOptionalParameter.new(par) unless ["userImpact","filter","booster","cascadeCreate","scenario","returnProperties","includedProperties","diversity","minRelevance","rotationRate","rotationTime","expertSettings","returnAbGroup"].include? par
       end
     end
   
@@ -160,6 +165,7 @@ module RecombeeApiClient
       p['rotationRate'] = @optional['rotationRate'] if @optional.include? 'rotationRate'
       p['rotationTime'] = @optional['rotationTime'] if @optional.include? 'rotationTime'
       p['expertSettings'] = @optional['expertSettings'] if @optional.include? 'expertSettings'
+      p['returnAbGroup'] = @optional['returnAbGroup'] if @optional.include? 'returnAbGroup'
       p
     end
   

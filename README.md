@@ -29,7 +29,7 @@ Or install it yourself as:
 require 'recombee_api_client'
 include RecombeeApiClient
 
-client = RecombeeClient('--my-database-id--', '--my-secret-token--')
+client = RecombeeClient('--my-database-id--', '--db-private-token--')
 
 # Generate some random purchases of items by users
 NUM = 100
@@ -71,7 +71,7 @@ include RecombeeApiClient
 NUM = 100
 PROBABILITY_PURCHASED = 0.1
 
-client = RecombeeClient('--my-database-id--', '--my-secret-token--')
+client = RecombeeClient('--my-database-id--', '--db-private-token--')
 client.send(ResetDatabase.new) # Clear everything from the database
 
 # We will use computers as items in this example

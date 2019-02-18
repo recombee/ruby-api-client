@@ -8,7 +8,7 @@ shared_examples 'add interaction' do
 include_context 'set environment'
 
   it 'does not fail with cascadeCreate' do
-    req = described_class.new('u_id','i_id',{'cascadeCreate' => true})
+    req = described_class.new('u_id','i_id',{'cascadeCreate' => true,'additionalData' => {'answer' => 42}})
     resp = @client.send(req)
   end
 

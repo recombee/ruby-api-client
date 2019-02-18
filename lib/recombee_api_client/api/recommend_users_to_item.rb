@@ -11,8 +11,10 @@ module RecombeeApiClient
   #
   #It is also possible to use POST HTTP method (for example in case of very long ReQL filter) - query parameters then become body parameters.
   #
+  #The returned users are sorted by predicted interest in the item (first user being the most interested).
+  #
   class RecommendUsersToItem < ApiRequest
-    attr_reader :item_id, :count, :filter, :booster, :cascade_create, :scenario, :return_properties, :included_properties, :diversity, :expert_settings
+    attr_reader :item_id, :count, :filter, :booster, :cascade_create, :scenario, :return_properties, :included_properties, :diversity, :expert_settings, :return_ab_group
     attr_accessor :timeout
     attr_accessor :ensure_https
   
@@ -80,6 +82,8 @@ module RecombeeApiClient
   #
   #   - +expertSettings+ -> Dictionary of custom options.
   #
+  #   - +returnAbGroup+ -> If there is a custom AB-testing running, return name of group to which the request belongs.
+  #
   #
     def initialize(item_id, count, optional = {})
       @item_id = item_id
@@ -93,11 +97,12 @@ module RecombeeApiClient
       @included_properties = optional['includedProperties']
       @diversity = optional['diversity']
       @expert_settings = optional['expertSettings']
+      @return_ab_group = optional['returnAbGroup']
       @optional = optional
       @timeout = 50000
       @ensure_https = false
       @optional.each do |par, _|
-        fail UnknownOptionalParameter.new(par) unless ["filter","booster","cascadeCreate","scenario","returnProperties","includedProperties","diversity","expertSettings"].include? par
+        fail UnknownOptionalParameter.new(par) unless ["filter","booster","cascadeCreate","scenario","returnProperties","includedProperties","diversity","expertSettings","returnAbGroup"].include? par
       end
     end
   
@@ -118,6 +123,7 @@ module RecombeeApiClient
       p['includedProperties'] = @optional['includedProperties'] if @optional.include? 'includedProperties'
       p['diversity'] = @optional['diversity'] if @optional.include? 'diversity'
       p['expertSettings'] = @optional['expertSettings'] if @optional.include? 'expertSettings'
+      p['returnAbGroup'] = @optional['returnAbGroup'] if @optional.include? 'returnAbGroup'
       p
     end
   

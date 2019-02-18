@@ -11,7 +11,7 @@ module RecombeeApiClient
   #If you send new request with the same (`userId`, `itemId`, `sessionId`), the portion gets updated.
   #
   class SetViewPortion < ApiRequest
-    attr_reader :user_id, :item_id, :portion, :session_id, :timestamp, :cascade_create, :recomm_id
+    attr_reader :user_id, :item_id, :portion, :session_id, :timestamp, :cascade_create, :recomm_id, :additional_data
     attr_accessor :timeout
     attr_accessor :ensure_https
   
@@ -26,6 +26,7 @@ module RecombeeApiClient
   #   - +timestamp+ -> UTC timestamp of the rating as ISO8601-1 pattern or UTC epoch time. The default value is the current time.
   #   - +cascadeCreate+ -> Sets whether the given user/item should be created if not present in the database.
   #   - +recommId+ -> If this view portion is based on a recommendation request, `recommId` is the id of the clicked recommendation.
+  #   - +additionalData+ -> A dictionary of additional data for the interaction.
   #
     def initialize(user_id, item_id, portion, optional = {})
       @user_id = user_id
@@ -36,11 +37,12 @@ module RecombeeApiClient
       @timestamp = optional['timestamp']
       @cascade_create = optional['cascadeCreate']
       @recomm_id = optional['recommId']
+      @additional_data = optional['additionalData']
       @optional = optional
       @timeout = 1000
       @ensure_https = false
       @optional.each do |par, _|
-        fail UnknownOptionalParameter.new(par) unless ["sessionId","timestamp","cascadeCreate","recommId"].include? par
+        fail UnknownOptionalParameter.new(par) unless ["sessionId","timestamp","cascadeCreate","recommId","additionalData"].include? par
       end
     end
   
@@ -59,6 +61,7 @@ module RecombeeApiClient
       p['timestamp'] = @optional['timestamp'] if @optional.include? 'timestamp'
       p['cascadeCreate'] = @optional['cascadeCreate'] if @optional.include? 'cascadeCreate'
       p['recommId'] = @optional['recommId'] if @optional.include? 'recommId'
+      p['additionalData'] = @optional['additionalData'] if @optional.include? 'additionalData'
       p
     end
   
