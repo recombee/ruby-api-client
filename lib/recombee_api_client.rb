@@ -18,13 +18,13 @@ module RecombeeApiClient
     include HTTParty
 
     BATCH_MAX_SIZE = 10000
-    USER_AGENT = {'User-Agent' => 'recombee-ruby-api-client/2.3.0'}
+    USER_AGENT = {'User-Agent' => 'recombee-ruby-api-client/2.4.0'}
 
     ##
     #   - +account+ -> Name of your account at Recombee
     #   - +token+ -> Secret token obtained from Recombee for signing requests
     #   - +protocol+ -> Default protocol for sending requests. Possible values: 'http', 'https'.
-    def initialize(account, token, protocol = 'http', options = {})
+    def initialize(account, token, protocol = 'https', options = {})
       @account = account
       @token = token
       @protocol = protocol

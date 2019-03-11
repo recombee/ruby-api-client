@@ -14,7 +14,7 @@ module RecombeeApiClient
   #The returned items are sorted by relevancy (first item being the most relevant).
   #
   class RecommendItemsToItem < ApiRequest
-    attr_reader :item_id, :target_user_id, :count, :user_impact, :filter, :booster, :cascade_create, :scenario, :return_properties, :included_properties, :diversity, :min_relevance, :rotation_rate, :rotation_time, :expert_settings, :return_ab_group
+    attr_reader :item_id, :target_user_id, :count, :filter, :booster, :cascade_create, :scenario, :logic, :return_properties, :included_properties, :user_impact, :diversity, :min_relevance, :rotation_rate, :rotation_time, :expert_settings, :return_ab_group
     attr_accessor :timeout
     attr_accessor :ensure_https
   
@@ -42,12 +42,15 @@ module RecombeeApiClient
   #   - +count+ -> Number of items to be recommended (N for the top-N recommendation).
   #
   # * *Optional arguments (given as hash optional)*
-  #   - +userImpact+ -> If *targetUserId* parameter is present, the recommendations are biased towards the user given. Using *userImpact*, you may control this bias. For an extreme case of `userImpact=0.0`, the interactions made by the user are not taken into account at all (with the exception of history-based blacklisting), for `userImpact=1.0`, you'll get user-based recommendation. The default value is `0`.
-  #
   #   - +filter+ -> Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to filter recommended items based on the values of their attributes.
   #   - +booster+ -> Number-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to boost recommendation rate of some items based on the values of their attributes.
   #   - +cascadeCreate+ -> If item of given *itemId* or user of given *targetUserId* doesn't exist in the database, it creates the missing entity/entities and returns some (non-personalized) recommendations. This allows for example rotations in the following recommendations for the user of given *targetUserId*, as the user will be already known to the system.
   #   - +scenario+ -> Scenario defines a particular application of recommendations. It can be for example "homepage", "cart" or "emailing". You can see each scenario in the UI separately, so you can check how well each application performs. The AI which optimizes models in order to get the best results may optimize different scenarios separately, or even use different models in each of the scenarios.
+  #   - +logic+ -> Logic specifies particular behavior of the recommendation models. You can pick tailored logic for your domain (e-commerce, multimedia, fashion ...) and use case.
+  #See [this section](https://docs.recombee.com/recommendation_logic.html) for list of available logics and other details.
+  #
+  #The difference between `logic` and `scenario` is that `logic` specifies mainly behavior, while `scenario` specifies the place where recommendations are shown to the users.
+  #
   #   - +returnProperties+ -> With `returnProperties=true`, property values of the recommended items are returned along with their IDs in a JSON dictionary. The acquired property values can be used for easy displaying of the recommended items to the user. 
   #
   #Example response:
@@ -104,6 +107,8 @@ module RecombeeApiClient
   #  }
   #```
   #
+  #   - +userImpact+ -> **Expert option** If *targetUserId* parameter is present, the recommendations are biased towards the given user. Using *userImpact*, you may control this bias. For an extreme case of `userImpact=0.0`, the interactions made by the user are not taken into account at all (with the exception of history-based blacklisting), for `userImpact=1.0`, you'll get user-based recommendation. The default value is `0`.
+  #
   #   - +diversity+ -> **Expert option** Real number from [0.0, 1.0] which determines how much mutually dissimilar should the recommended items be. The default value is 0.0, i.e., no diversification. Value 1.0 means maximal diversification.
   #
   #   - +minRelevance+ -> **Expert option** If the *targetUserId* is provided:  Specifies the threshold of how much relevant must the recommended items be to the user. Possible values one of: "low", "medium", "high". The default value is "low", meaning that the system attempts to recommend number of items equal to *count* at any cost. If there are not enough data (such as interactions or item properties), this may even lead to bestseller-based recommendations to be appended to reach the full *count*. This behavior may be suppressed by using "medium" or "high" values. In such case, the system only recommends items of at least the requested relevancy, and may return less than *count* items when there is not enough data to fulfill it.
@@ -122,13 +127,14 @@ module RecombeeApiClient
       @target_user_id = target_user_id
       @count = count
       optional = normalize_optional(optional)
-      @user_impact = optional['userImpact']
       @filter = optional['filter']
       @booster = optional['booster']
       @cascade_create = optional['cascadeCreate']
       @scenario = optional['scenario']
+      @logic = optional['logic']
       @return_properties = optional['returnProperties']
       @included_properties = optional['includedProperties']
+      @user_impact = optional['userImpact']
       @diversity = optional['diversity']
       @min_relevance = optional['minRelevance']
       @rotation_rate = optional['rotationRate']
@@ -139,7 +145,7 @@ module RecombeeApiClient
       @timeout = 3000
       @ensure_https = false
       @optional.each do |par, _|
-        fail UnknownOptionalParameter.new(par) unless ["userImpact","filter","booster","cascadeCreate","scenario","returnProperties","includedProperties","diversity","minRelevance","rotationRate","rotationTime","expertSettings","returnAbGroup"].include? par
+        fail UnknownOptionalParameter.new(par) unless ["filter","booster","cascadeCreate","scenario","logic","returnProperties","includedProperties","userImpact","diversity","minRelevance","rotationRate","rotationTime","expertSettings","returnAbGroup"].include? par
       end
     end
   
@@ -153,13 +159,14 @@ module RecombeeApiClient
       p = Hash.new
       p['targetUserId'] = @target_user_id
       p['count'] = @count
-      p['userImpact'] = @optional['userImpact'] if @optional.include? 'userImpact'
       p['filter'] = @optional['filter'] if @optional.include? 'filter'
       p['booster'] = @optional['booster'] if @optional.include? 'booster'
       p['cascadeCreate'] = @optional['cascadeCreate'] if @optional.include? 'cascadeCreate'
       p['scenario'] = @optional['scenario'] if @optional.include? 'scenario'
+      p['logic'] = @optional['logic'] if @optional.include? 'logic'
       p['returnProperties'] = @optional['returnProperties'] if @optional.include? 'returnProperties'
       p['includedProperties'] = @optional['includedProperties'] if @optional.include? 'includedProperties'
+      p['userImpact'] = @optional['userImpact'] if @optional.include? 'userImpact'
       p['diversity'] = @optional['diversity'] if @optional.include? 'diversity'
       p['minRelevance'] = @optional['minRelevance'] if @optional.include? 'minRelevance'
       p['rotationRate'] = @optional['rotationRate'] if @optional.include? 'rotationRate'

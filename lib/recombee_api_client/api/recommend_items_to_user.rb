@@ -14,7 +14,7 @@ module RecombeeApiClient
   #The returned items are sorted by relevancy (first item being the most relevant).
   #
   class RecommendItemsToUser < ApiRequest
-    attr_reader :user_id, :count, :filter, :booster, :cascade_create, :scenario, :return_properties, :included_properties, :diversity, :min_relevance, :rotation_rate, :rotation_time, :expert_settings, :return_ab_group
+    attr_reader :user_id, :count, :filter, :booster, :cascade_create, :scenario, :logic, :return_properties, :included_properties, :diversity, :min_relevance, :rotation_rate, :rotation_time, :expert_settings, :return_ab_group
     attr_accessor :timeout
     attr_accessor :ensure_https
   
@@ -28,6 +28,11 @@ module RecombeeApiClient
   #   - +booster+ -> Number-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to boost recommendation rate of some items based on the values of their attributes.
   #   - +cascadeCreate+ -> If the user does not exist in the database, returns a list of non-personalized recommendations and creates the user in the database. This allows for example rotations in the following recommendations for that user, as the user will be already known to the system.
   #   - +scenario+ -> Scenario defines a particular application of recommendations. It can be for example "homepage", "cart" or "emailing". You can see each scenario in the UI separately, so you can check how well each application performs. The AI which optimizes models in order to get the best results may optimize different scenarios separately, or even use different models in each of the scenarios.
+  #   - +logic+ -> Logic specifies particular behavior of the recommendation models. You can pick tailored logic for your domain (e-commerce, multimedia, fashion ...) and use case.
+  #See [this section](https://docs.recombee.com/recommendation_logic.html) for list of available logics and other details.
+  #
+  #The difference between `logic` and `scenario` is that `logic` specifies mainly behavior, while `scenario` specifies the place where recommendations are shown to the users.
+  #
   #   - +returnProperties+ -> With `returnProperties=true`, property values of the recommended items are returned along with their IDs in a JSON dictionary. The acquired property values can be used for easy displaying of the recommended items to the user. 
   #
   #Example response:
@@ -105,6 +110,7 @@ module RecombeeApiClient
       @booster = optional['booster']
       @cascade_create = optional['cascadeCreate']
       @scenario = optional['scenario']
+      @logic = optional['logic']
       @return_properties = optional['returnProperties']
       @included_properties = optional['includedProperties']
       @diversity = optional['diversity']
@@ -117,7 +123,7 @@ module RecombeeApiClient
       @timeout = 3000
       @ensure_https = false
       @optional.each do |par, _|
-        fail UnknownOptionalParameter.new(par) unless ["filter","booster","cascadeCreate","scenario","returnProperties","includedProperties","diversity","minRelevance","rotationRate","rotationTime","expertSettings","returnAbGroup"].include? par
+        fail UnknownOptionalParameter.new(par) unless ["filter","booster","cascadeCreate","scenario","logic","returnProperties","includedProperties","diversity","minRelevance","rotationRate","rotationTime","expertSettings","returnAbGroup"].include? par
       end
     end
   
@@ -134,6 +140,7 @@ module RecombeeApiClient
       p['booster'] = @optional['booster'] if @optional.include? 'booster'
       p['cascadeCreate'] = @optional['cascadeCreate'] if @optional.include? 'cascadeCreate'
       p['scenario'] = @optional['scenario'] if @optional.include? 'scenario'
+      p['logic'] = @optional['logic'] if @optional.include? 'logic'
       p['returnProperties'] = @optional['returnProperties'] if @optional.include? 'returnProperties'
       p['includedProperties'] = @optional['includedProperties'] if @optional.include? 'includedProperties'
       p['diversity'] = @optional['diversity'] if @optional.include? 'diversity'

@@ -2,12 +2,13 @@ require 'spec_helper'
 require_relative 'set_environment'
 
 shared_examples 'recommendation' do
+  include_context 'set environment'
   include_context 'set recomm entities'
   # TODO: more tests
 
   it 'recommends' do
     recom_req = described_class.new('entity_id', 9)
-    expect(@client.send(recom_req['recomms']).size).to eq(9)
+    expect(@client.send(recom_req)['recomms'].size).to eq(9)
   end
 
   it 'rotates' do
