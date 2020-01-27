@@ -6,8 +6,19 @@ RSpec.shared_context 'set environment', a: :b do
   before(:each) do
     @client = RecombeeClient.new('client-test', 'jGGQ6ZKa8rQ1zTAyxTc0EMn55YPF7FJLUtaMLhbsGxmvwxgTwXYqmUk5xVZFw98L')
 
+    @client.send(ResetDatabase.new)
+
+    while true
+      begin
+        @client.send(ListItems.new)
+      rescue ResponseError
+        # Wait until DB is erased
+        next
+      end
+      break
+    end
+
     requests = Batch.new([
-        ResetDatabase.new,
         AddItem.new('entity_id'),
         AddUser.new('entity_id'),
         AddSeries.new('entity_id'),

@@ -14,25 +14,23 @@ module RecombeeApiClient
   #The returned users are sorted by similarity (first user being the most similar).
   #
   class RecommendUsersToUser < ApiRequest
-    attr_reader :user_id, :count, :filter, :booster, :cascade_create, :scenario, :logic, :return_properties, :included_properties, :diversity, :min_relevance, :rotation_rate, :rotation_time, :expert_settings, :return_ab_group
+    attr_reader :user_id, :count, :scenario, :cascade_create, :return_properties, :included_properties, :filter, :booster, :logic, :diversity, :min_relevance, :rotation_rate, :rotation_time, :expert_settings, :return_ab_group
     attr_accessor :timeout
     attr_accessor :ensure_https
   
   ##
   # * *Required arguments*
-  #   - +user_id+ -> User to which we find similar users
+  #   - +user_id+ -> User to whom we find similar users
   #   - +count+ -> Number of users to be recommended (N for the top-N recommendation).
   #
   # * *Optional arguments (given as hash optional)*
-  #   - +filter+ -> Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to filter recommended users based on the values of their attributes.
-  #   - +booster+ -> Number-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to boost recommendation rate of some users based on the values of their attributes.
+  #   - +scenario+ -> Scenario defines a particular application of recommendations. It can be for example "homepage", "cart" or "emailing".
+  #
+  #You can set various settings to the [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com). You can also see performance of each scenario in the Admin UI separately, so you can check how well each application performs.
+  #
+  #The AI which optimizes models in order to get the best results may optimize different scenarios separately, or even use different models in each of the scenarios.
+  #
   #   - +cascadeCreate+ -> If the user does not exist in the database, returns a list of non-personalized recommendations and creates the user in the database. This allows for example rotations in the following recommendations for that user, as the user will be already known to the system.
-  #   - +scenario+ -> Scenario defines a particular application of recommendations. It can be for example "homepage", "cart" or "emailing". You can see each scenario in the UI separately, so you can check how well each application performs. The AI which optimizes models in order to get the best results may optimize different scenarios separately, or even use different models in each of the scenarios.
-  #   - +logic+ -> Logic specifies particular behavior of the recommendation models. You can pick tailored logic for your domain (e-commerce, multimedia, fashion ...) and use case.
-  #See [this section](https://docs.recombee.com/recommendation_logic.html) for list of available logics and other details.
-  #
-  #The difference between `logic` and `scenario` is that `logic` specifies mainly behavior, while `scenario` specifies the place where recommendations are shown to the users.
-  #
   #   - +returnProperties+ -> With `returnProperties=true`, property values of the recommended users are returned along with their IDs in a JSON dictionary. The acquired property values can be used for easy displaying the recommended users. 
   #
   #Example response:
@@ -83,9 +81,24 @@ module RecombeeApiClient
   #  }
   #```
   #
+  #   - +filter+ -> Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to filter recommended items based on the values of their attributes.
+  #
+  #Filters can be also assigned to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
+  #
+  #   - +booster+ -> Number-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to boost recommendation rate of some items based on the values of their attributes.
+  #
+  #Boosters can be also assigned to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
+  #
+  #   - +logic+ -> Logic specifies particular behavior of the recommendation models. You can pick tailored logic for your domain and use case.
+  #See [this section](https://docs.recombee.com/recommendation_logics.html) for list of available logics and other details.
+  #
+  #The difference between `logic` and `scenario` is that `logic` specifies mainly behavior, while `scenario` specifies the place where recommendations are shown to the users.
+  #
+  #Logic can be also set to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
+  #
   #   - +diversity+ -> **Expert option** Real number from [0.0, 1.0] which determines how much mutually dissimilar should the recommended users be. The default value is 0.0, i.e., no diversification. Value 1.0 means maximal diversification.
   #
-  #   - +minRelevance+ -> **Expert option** Specifies the threshold of how much relevant must the recommended users be. Possible values one of: "low", "medium", "high". The default value is "low", meaning that the system attempts to recommend number of users equal to *count* at any cost. If there are not enough data (such as interactions or user properties), this may even lead to bestseller-based recommendations to be appended to reach the full *count*. This behavior may be suppressed by using "medium" or "high" values. In such case, the system only recommends users of at least the requested relevancy, and may return less than *count* users when there is not enough data to fulfill it.
+  #   - +minRelevance+ -> **Expert option** Specifies the threshold of how much relevant must the recommended users be. Possible values one of: "low", "medium", "high".
   #
   #   - +rotationRate+ -> **Expert option** If your users browse the system in real-time, it may easily happen that you wish to offer them recommendations multiple times. Here comes the question: how much should the recommendations change? Should they remain the same, or should they rotate? Recombee API allows you to control this per-request in backward fashion. You may penalize an user for being recommended in the near past. For the specific user, `rotationRate=1` means maximal rotation, `rotationRate=0` means absolutely no rotation. You may also use, for example `rotationRate=0.2` for only slight rotation of recommended users.
   #
@@ -100,13 +113,13 @@ module RecombeeApiClient
       @user_id = user_id
       @count = count
       optional = normalize_optional(optional)
-      @filter = optional['filter']
-      @booster = optional['booster']
-      @cascade_create = optional['cascadeCreate']
       @scenario = optional['scenario']
-      @logic = optional['logic']
+      @cascade_create = optional['cascadeCreate']
       @return_properties = optional['returnProperties']
       @included_properties = optional['includedProperties']
+      @filter = optional['filter']
+      @booster = optional['booster']
+      @logic = optional['logic']
       @diversity = optional['diversity']
       @min_relevance = optional['minRelevance']
       @rotation_rate = optional['rotationRate']
@@ -117,7 +130,7 @@ module RecombeeApiClient
       @timeout = 50000
       @ensure_https = false
       @optional.each do |par, _|
-        fail UnknownOptionalParameter.new(par) unless ["filter","booster","cascadeCreate","scenario","logic","returnProperties","includedProperties","diversity","minRelevance","rotationRate","rotationTime","expertSettings","returnAbGroup"].include? par
+        fail UnknownOptionalParameter.new(par) unless ["scenario","cascadeCreate","returnProperties","includedProperties","filter","booster","logic","diversity","minRelevance","rotationRate","rotationTime","expertSettings","returnAbGroup"].include? par
       end
     end
   
@@ -130,13 +143,13 @@ module RecombeeApiClient
     def body_parameters
       p = Hash.new
       p['count'] = @count
-      p['filter'] = @optional['filter'] if @optional.include? 'filter'
-      p['booster'] = @optional['booster'] if @optional.include? 'booster'
-      p['cascadeCreate'] = @optional['cascadeCreate'] if @optional.include? 'cascadeCreate'
       p['scenario'] = @optional['scenario'] if @optional.include? 'scenario'
-      p['logic'] = @optional['logic'] if @optional.include? 'logic'
+      p['cascadeCreate'] = @optional['cascadeCreate'] if @optional.include? 'cascadeCreate'
       p['returnProperties'] = @optional['returnProperties'] if @optional.include? 'returnProperties'
       p['includedProperties'] = @optional['includedProperties'] if @optional.include? 'includedProperties'
+      p['filter'] = @optional['filter'] if @optional.include? 'filter'
+      p['booster'] = @optional['booster'] if @optional.include? 'booster'
+      p['logic'] = @optional['logic'] if @optional.include? 'logic'
       p['diversity'] = @optional['diversity'] if @optional.include? 'diversity'
       p['minRelevance'] = @optional['minRelevance'] if @optional.include? 'minRelevance'
       p['rotationRate'] = @optional['rotationRate'] if @optional.include? 'rotationRate'

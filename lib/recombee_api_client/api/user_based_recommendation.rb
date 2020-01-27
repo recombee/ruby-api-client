@@ -20,7 +20,7 @@ module RecombeeApiClient
   
   ##
   # * *Required arguments*
-  #   - +user_id+ -> ID of the user for which the personalized recommendations are to be generated.
+  #   - +user_id+ -> ID of the user for whom the personalized recommendations are to be generated.
   #   - +count+ -> Number of items to be recommended (N for the top-N recommendation).
   #
   # * *Optional arguments (given as hash optional)*

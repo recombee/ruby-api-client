@@ -72,7 +72,7 @@ NUM = 100
 PROBABILITY_PURCHASED = 0.1
 
 client = RecombeeClient('--my-database-id--', '--db-private-token--')
-client.send(ResetDatabase.new) # Clear everything from the database
+client.send(ResetDatabase.new) # Clear everything from the database (asynchronous)
 
 # We will use computers as items in this example
 # Computers have five properties 
@@ -103,7 +103,7 @@ requests = (1..NUM).map do |i|
       },
       #optional parameters:
       {
-        'cascadeCreate' => true  # Use cascadeCreate for creating item
+        :cascade_create => true  # Use cascade_create for creating item
                                  # with given itemId, if it doesn't exist
       }
     )
@@ -117,29 +117,38 @@ requests = []
 (1..NUM).map{|i| "computer-#{i}"}.each do |item_id|
   user_ids = (1..NUM).map{|i| "user-#{i}"}
   user_ids = user_ids.select { |_| rand(0.0..1.0) < PROBABILITY_PURCHASED }
-  # Use cascadeCreate to create unexisting users
-  user_ids.each { |user_id| requests.push(AddPurchase.new(user_id, item_id, 'cascadeCreate' => true)) }
+  # Use cascade_create to create unexisting users
+  user_ids.each { |user_id| requests.push(AddPurchase.new(user_id, item_id, :cascade_create => true)) }
 end
 
 # Send purchases to the recommender system
 client.send(Batch.new(requests))
 
 # Get 5 recommendations for user-42, who is currently viewing computer-6
-recommended = client.send(RecommendItemsToItem.new('computer-6', 'user-42', 5) )
-puts "Recommended items: #{recommended}"
-
 # Recommend only computers that have at least 3 cores
 recommended = client.send(
-  RecommendItemsToItem.new('computer-6', 'user-42', 5, {'filter' => "'num-cores'>=3"})
+  RecommendItemsToItem.new('computer-6', 'user-42', 5, {:filter => "'num-cores'>=3"})
   )
 puts "Recommended items with at least 3 processor cores: #{recommended}"
 
-# Recommend only items thatare more expensive then currently viewed item (up-sell)
+# Recommend only items that are more expensive then currently viewed item (up-sell)
 recommended = client.send(
   RecommendItemsToItem.new('computer-6', 'user-42', 5,
-    {'filter' => "'price' > context_item[\"price\"]"})
+    {:filter => "'price' > context_item[\"price\"]"})
   )
 puts "Recommended up-sell items: #{recommended}"
+
+# Filters, boosters and other settings can be also set in the Admin UI (admin.recombee.com)
+# when scenario is specified
+recommended = client.send(
+  RecommendItemsToItem.new('computer-6', 'user-42', 5, {:scenario => 'product_detail'})
+  )
+
+# Perform personalized full-text search with a user's search query (e.g. 'computers').
+matches = client.send(
+  SearchItems.new('user-42', 'computers', 5)
+  )
+puts "Matched items: #{matches}"
 ```
 
 ### Exception handling
