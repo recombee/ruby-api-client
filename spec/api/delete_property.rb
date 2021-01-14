@@ -17,7 +17,7 @@ include_context 'set environment'
   end
 
   it 'fails with invalid property' do
-    req = described_class.new('$$$not_valid$$$')
+    req = described_class.new('***not_valid$$$')
     expect { @client.send(req) }.to raise_exception { |exception|
        expect(exception).to be_a(RecombeeApiClient::ResponseError)
        expect(exception.status_code).to eq 400

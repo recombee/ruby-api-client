@@ -55,8 +55,13 @@ begin
   client.send(Batch.new(purchases))
   
   # Get recommendations for user 'user-25'
-  recommended = client.send(RecommendItemsToUser.new('user-25', 5))
-  puts "Recommended items for user-25: #{recommended}"
+  response = client.send(RecommendItemsToUser.new('user-25', 5))
+  puts "Recommended items for user-25: #{response}"
+
+  # User scrolled down - get next 3 recommended items
+  response = client.send(RecommendNextItems.new(response['recommId'], 3))
+  puts "Next recommended items for user-25: #{response}"
+
 rescue APIError => e
   puts e
   # Use fallback
@@ -146,7 +151,7 @@ recommended = client.send(
 
 # Perform personalized full-text search with a user's search query (e.g. 'computers').
 matches = client.send(
-  SearchItems.new('user-42', 'computers', 5)
+  SearchItems.new('user-42', 'computers', 5, {:scenario => 'search_top'})
   )
 puts "Matched items: #{matches}"
 ```

@@ -13,9 +13,14 @@ module RecombeeApiClient
   #
   #This endpoint should be used in a search box at your website/app. It can be called multiple times as the user is typing the query in order to get the most viable suggestions based on current state of the query, or once after submitting the whole query. 
   #
-  #It is also possible to use POST HTTP method (for example in case of very long ReQL filter) - query parameters then become body parameters.
+  #The returned items are sorted by relevance (first item being the most relevant).
   #
-  #The returned items are sorted by relevancy (first item being the most relevant).
+  #Besides the recommended items, also a unique `recommId` is returned in the response. It can be used to:
+  #
+  #- Let Recombee know that this search was successful (e.g. user clicked one of the recommended items). See [Reported metrics](https://docs.recombee.com/admin_ui.html#reported-metrics).
+  #- Get subsequent search results when the user scrolls down or goes to the next page. See [Recommend Next Items](https://docs.recombee.com/api.html#recommend-next-items).
+  #
+  #It is also possible to use POST HTTP method (for example in case of very long ReQL filter) - query parameters then become body parameters.
   #
   class SearchItems < ApiRequest
     attr_reader :user_id, :search_query, :count, :scenario, :cascade_create, :return_properties, :included_properties, :filter, :booster, :logic, :expert_settings, :return_ab_group
@@ -62,7 +67,8 @@ module RecombeeApiClient
   #            "url": "myshop.com/mixer-42"
   #          }
   #        }
-  #      ]
+  #      ],
+  #    "numberNextRecommsCalls": 0
   #  }
   #```
   #
@@ -88,7 +94,8 @@ module RecombeeApiClient
   #            "price": 39
   #          }
   #        }
-  #      ]
+  #      ],
+  #    "numberNextRecommsCalls": 0
   #  }
   #```
   #

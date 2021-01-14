@@ -53,7 +53,8 @@ module RecombeeApiClient
   #            "sex": "M"
   #          }
   #        }
-  #      ]
+  #      ],
+  #    "numberNextRecommsCalls": 0
   #  }
   #```
   #
@@ -77,7 +78,8 @@ module RecombeeApiClient
   #            "country": "CAN"
   #          }
   #        }
-  #      ]
+  #      ],
+  #    "numberNextRecommsCalls": 0
   #  }
   #```
   #

@@ -53,8 +53,9 @@ module RecombeeApiClient
   #            "sex": "M"
   #          }
   #        }
-  #      ]
-  #    }
+  #      ],
+  #    "numberNextRecommsCalls": 0
+  #  }
   #```
   #
   #   - +includedProperties+ -> Allows to specify, which properties should be returned when `returnProperties=true` is set. The properties are given as a comma-separated list. 
@@ -77,7 +78,8 @@ module RecombeeApiClient
   #            "country": "CAN"
   #          }
   #        }
-  #      ]
+  #      ],
+  #    "numberNextRecommsCalls": 0
   #  }
   #```
   #
