@@ -7,7 +7,7 @@ describe RecombeeApiClient::Batch do
   it 'send various requests' do
 
     reqs = [
-      ResetDatabase.new,
+      DeleteItem.new('entity_id'),
       AddItemProperty.new('num', 'int'),
       AddItemProperty.new('time', 'timestamp'),
       SetItemValues.new('item1', {

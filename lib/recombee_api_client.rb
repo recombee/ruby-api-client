@@ -18,19 +18,16 @@ module RecombeeApiClient
     include HTTParty
 
     BATCH_MAX_SIZE = 10000
-    USER_AGENT = {'User-Agent' => 'recombee-ruby-api-client/3.2.0'}
+    USER_AGENT = {'User-Agent' => 'recombee-ruby-api-client/4.0.0'}
 
     ##
     #   - +account+ -> Name of your account at Recombee
     #   - +token+ -> Secret token obtained from Recombee for signing requests
-    #   - +protocol+ -> Default protocol for sending requests. Possible values: 'http', 'https'.
-    def initialize(account, token, protocol = 'https', options = {})
+    def initialize(account, token, options = {})
       @account = account
       @token = token
-      @protocol = protocol
-      @base_uri = ENV['RAPI_URI'] if ENV.key? 'RAPI_URI'
-      @base_uri||=  options[:base_uri]
-      @base_uri||= 'rapi.recombee.com'
+      @protocol = options[:protocol] || 'https'
+      @base_uri = get_base_uri(options)
     end
 
     ##
@@ -42,7 +39,7 @@ module RecombeeApiClient
       timeout = request.timeout / 1000
       uri = process_request_uri(request)
       uri = sign_url(uri)
-      protocol = request.ensure_https ? 'https' : @protocol
+      protocol = request.ensure_https ? 'https' : @protocol.to_s
       uri = protocol + '://' + @base_uri + uri
       # puts uri
       begin
@@ -63,10 +60,33 @@ module RecombeeApiClient
 
     private
 
+    def get_regional_base_uri(region)
+      uri = {
+            'ap-se' => 'rapi-ap-se.recombee.com',
+            'ca-east' => 'rapi-ca-east.recombee.com',
+            'eu-west' => 'rapi-eu-west.recombee.com',
+            'us-west' => 'rapi-us-west.recombee.com'
+          }[region.to_s.gsub('_', '-').downcase]
+      raise ArgumentError.new("Region \"#{region}\" is unknown. You may need to update the version of the SDK.") if uri == nil
+      uri
+    end
+
+    def get_base_uri(options)
+      base_uri = ENV['RAPI_URI']
+      base_uri ||= options[:base_uri]
+
+      if options.key? :region
+        raise ArgumentError.new(':base_uri and :region cannot be specified at the same time') if base_uri
+        base_uri = get_regional_base_uri(options[:region])
+      end
+      base_uri||= 'rapi.recombee.com'
+      base_uri
+    end
+
     def put(request, uri, timeout)
       response = self.class.put(uri, body: request.body_parameters.to_json, 
-                        headers: { 'Content-Type' => 'application/json' }.merge(USER_AGENT),
-                        timeout: timeout)
+                                headers: { 'Content-Type' => 'application/json' }.merge(USER_AGENT),
+                                timeout: timeout)
       check_errors(response, request)
       response.body
     end
@@ -78,10 +98,9 @@ module RecombeeApiClient
     end
 
     def post(request, uri, timeout)
-      # pass arguments in body
       response = self.class.post(uri, body: request.body_parameters.to_json, 
-                        headers: { 'Content-Type' => 'application/json' }.merge(USER_AGENT),
-                        timeout: timeout)
+                                 headers: { 'Content-Type' => 'application/json' }.merge(USER_AGENT),
+                                 timeout: timeout)
       check_errors(response, request)
       begin
         return JSON.parse(response.body)
@@ -91,9 +110,15 @@ module RecombeeApiClient
     end
 
     def delete(request, uri, timeout)
-      response = self.class.delete(uri, timeout: timeout, headers: USER_AGENT)
+      response = self.class.delete(uri, body: request.body_parameters.to_json,
+                                   headers: { 'Content-Type' => 'application/json' }.merge(USER_AGENT),
+                                   timeout: timeout)
       check_errors(response, request)
-      response.body
+      begin
+        return JSON.parse(response.body)
+      rescue JSON::ParserError
+        return response.body
+      end
     end
 
     def check_errors(response, request)

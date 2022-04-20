@@ -19,7 +19,7 @@ shared_examples 'recommendation' do
     recommended1_ids = recommended1['recomms'].map {|r| r['id']}
     recommended2 = @client.send(recom_req)
     expect(recommended2['recomms'].size).to eq(9)
-    expect(recommended2['recomms']).map {|r| r['id']}.not_to include(recommended1_ids)
+    expect(recommended2['recomms'].map {|r| r['id']}).not_to include(recommended1_ids)
   end
 
   it 'returns properties' do

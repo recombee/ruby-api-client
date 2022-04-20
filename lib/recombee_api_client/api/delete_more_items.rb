@@ -7,21 +7,20 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Deletes a user of given *userId* from the database.
+  #Delete all the items that pass the filter.
   #
-  #If there are any purchases, ratings, bookmarks, cart additions or detail views made by the user present in the database, they will be deleted in cascade as well.
-  #
-  class DeleteUser < ApiRequest
-    attr_reader :user_id
+  #If an item becomes obsolete/no longer available, it is meaningful to **keep it in the catalog** (along with all the interaction data, which are very useful), and **only exclude the item from recommendations**. In such a case, use [ReQL filter](https://docs.recombee.com/reql.html) instead of deleting the item completely.
+  class DeleteMoreItems < ApiRequest
+    attr_reader :filter
     attr_accessor :timeout
     attr_accessor :ensure_https
   
   ##
   # * *Required arguments*
-  #   - +user_id+ -> ID of the user to be deleted.
+  #   - +filter+ -> A [ReQL](https://docs.recombee.com/reql.html) expression, which return `true` for the items that shall be updated.
   #
-    def initialize(user_id)
-      @user_id = user_id
+    def initialize(filter)
+      @filter = filter
       @timeout = 1000
       @ensure_https = false
     end
@@ -34,6 +33,7 @@ module RecombeeApiClient
     # Values of body parameters as a Hash
     def body_parameters
       p = Hash.new
+      p['filter'] = @filter
       p
     end
   
@@ -46,7 +46,7 @@ module RecombeeApiClient
   
     # Relative path to the endpoint
     def path
-      "/{databaseId}/users/#{@user_id}"
+      "/{databaseId}/more-items/"
     end
   end
 end

@@ -4,7 +4,11 @@ include RecombeeApiClient
 
 RSpec.shared_context 'set environment', a: :b do
   before(:each) do
-    @client = RecombeeClient.new('client-test', 'jGGQ6ZKa8rQ1zTAyxTc0EMn55YPF7FJLUtaMLhbsGxmvwxgTwXYqmUk5xVZFw98L')
+
+    db_id = ENV['DB_ID'] || raise('DB_ID env var must be specified')
+    token = ENV['PRIVATE_TOKEN'] || raise('PRIVATE_TOKEN env var must be specified')
+
+    @client = RecombeeClient.new(db_id, token, {:region => 'eu-west'})
 
     @client.send(ResetDatabase.new)
 
