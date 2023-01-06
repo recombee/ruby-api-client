@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Adds a rating of given item made by a given user.
+  #Adds a rating of the given item made by the given user.
   #
   class AddRating < ApiRequest
     attr_reader :user_id, :item_id, :timestamp, :rating, :cascade_create, :recomm_id, :additional_data

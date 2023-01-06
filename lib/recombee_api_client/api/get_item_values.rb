@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Get all the current property values of a given item.
+  #Gets all the current property values of the given item.
   #
   class GetItemValues < ApiRequest
     attr_reader :item_id
@@ -16,7 +16,7 @@ module RecombeeApiClient
   
   ##
   # * *Required arguments*
-  #   - +item_id+ -> ID of the item properties of which are to be obtained.
+  #   - +item_id+ -> ID of the item whose properties are to be obtained.
   #
   #
     def initialize(item_id)

@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #List all the ratings ever submitted by a given user.
+  #Lists all the ratings ever submitted by the given user.
   class ListUserRatings < ApiRequest
     attr_reader :user_id
     attr_accessor :timeout

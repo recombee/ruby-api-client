@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #List all the ever-made purchases of a given item.
+  #Lists all the ever-made purchases of the given item.
   class ListItemPurchases < ApiRequest
     attr_reader :item_id
     attr_accessor :timeout
@@ -15,7 +15,7 @@ module RecombeeApiClient
   
   ##
   # * *Required arguments*
-  #   - +item_id+ -> ID of the item of which the pucrhases are to be listed.
+  #   - +item_id+ -> ID of the item whose purchases are to be listed.
   #
   #
     def initialize(item_id)

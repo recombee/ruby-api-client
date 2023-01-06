@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #List all the ratings of an item ever submitted by different users.
+  #Lists all the ratings of an item ever submitted by different users.
   class ListItemRatings < ApiRequest
     attr_reader :item_id
     attr_accessor :timeout
@@ -15,7 +15,7 @@ module RecombeeApiClient
   
   ##
   # * *Required arguments*
-  #   - +item_id+ -> ID of the item of which the ratings are to be listed.
+  #   - +item_id+ -> ID of the item whose ratings are to be listed.
   #
   #
     def initialize(item_id)

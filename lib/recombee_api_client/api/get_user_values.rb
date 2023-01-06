@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Get all the current property values of a given user.
+  #Gets all the current property values of the given user.
   #
   class GetUserValues < ApiRequest
     attr_reader :user_id
@@ -16,7 +16,7 @@ module RecombeeApiClient
   
   ##
   # * *Required arguments*
-  #   - +user_id+ -> ID of the user properties of which are to be obtained.
+  #   - +user_id+ -> ID of the user whose properties are to be obtained.
   #
   #
     def initialize(user_id)

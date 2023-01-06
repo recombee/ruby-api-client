@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Deletes the series of given `seriesId` from the database.
+  #Deletes the series of the given `seriesId` from the database.
   #
   #Deleting a series will only delete assignment of items to it, not the items themselves!
   #

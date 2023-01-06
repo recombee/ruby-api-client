@@ -7,9 +7,9 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Deletes the group of given `groupId` from the database.
+  #Deletes the group of the given `groupId` from the database.
   #
-  #Deleting a group will only delete assignment of items to it, not the items themselves!
+  #Deleting a group will only delete the assignment of items to it, not the items themselves!
   #
   class DeleteGroup < ApiRequest
     attr_reader :group_id

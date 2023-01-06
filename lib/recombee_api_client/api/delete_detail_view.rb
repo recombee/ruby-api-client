@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Deletes an existing detail view uniquely specified by (`userId`, `itemId`, and `timestamp`) or all the detail views with given `userId` and `itemId` if `timestamp` is omitted.
+  #Deletes an existing detail view uniquely specified by (`userId`, `itemId`, and `timestamp`) or all the detail views with the given `userId` and `itemId` if `timestamp` is omitted.
   #
   class DeleteDetailView < ApiRequest
     attr_reader :user_id, :item_id, :timestamp
@@ -17,10 +17,10 @@ module RecombeeApiClient
   ##
   # * *Required arguments*
   #   - +user_id+ -> ID of the user who made the detail view.
-  #   - +item_id+ -> ID of the item of which the details were viewed.
+  #   - +item_id+ -> ID of the item whose details were viewed.
   #
   # * *Optional arguments (given as hash optional)*
-  #   - +timestamp+ -> Unix timestamp of the detail view. If the `timestamp` is omitted, then all the detail views with given `userId` and `itemId` are deleted.
+  #   - +timestamp+ -> Unix timestamp of the detail view. If the `timestamp` is omitted, then all the detail views with the given `userId` and `itemId` are deleted.
   #
     def initialize(user_id, item_id, optional = {})
       @user_id = user_id

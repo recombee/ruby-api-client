@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Deleting an user property is roughly equivalent to removing a column from the table of users.
+  #Deleting a user property is roughly equivalent to removing a column from the table of users.
   #
   class DeleteUserProperty < ApiRequest
     attr_reader :property_name

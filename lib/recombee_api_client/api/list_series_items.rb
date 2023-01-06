@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #List all the items present in the given series, sorted according to their time index values.
+  #Lists all the items present in the given series, sorted according to their time index values.
   class ListSeriesItems < ApiRequest
     attr_reader :series_id
     attr_accessor :timeout
@@ -15,7 +15,7 @@ module RecombeeApiClient
   
   ##
   # * *Required arguments*
-  #   - +series_id+ -> ID of the series items of which are to be listed.
+  #   - +series_id+ -> ID of the series whose items are to be listed.
   #
     def initialize(series_id)
       @series_id = series_id

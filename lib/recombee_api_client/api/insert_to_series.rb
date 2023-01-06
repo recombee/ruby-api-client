@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Inserts an existing item/series into series of given seriesId at position determined by time.
+  #Inserts an existing item/series into a series of the given seriesId at a position determined by time.
   #
   class InsertToSeries < ApiRequest
     attr_reader :series_id, :item_type, :item_id, :time, :cascade_create
@@ -22,7 +22,7 @@ module RecombeeApiClient
   #   - +time+ -> Time index used for sorting items in the series. According to time, items are sorted within series in ascending order. In the example of TV show episodes, the episode number is a natural choice to be passed as time.
   #
   # * *Optional arguments (given as hash optional)*
-  #   - +cascadeCreate+ -> Indicates that any non-existing entity specified within the request should be created (as is corresponding PUT requests were invoked). This concerns both the `seriesId` and the `itemId`. If `cascadeCreate` is set true, the behavior also depends on the `itemType`. Either item or series may be created if not present in the database.
+  #   - +cascadeCreate+ -> Indicates that any non-existing entity specified within the request should be created (as if corresponding PUT requests were invoked). This concerns both the `seriesId` and the `itemId`. If `cascadeCreate` is set to true, the behavior also depends on the `itemType`. Either item or series may be created if not present in the database.
   #
     def initialize(series_id, item_type, item_id, time, optional = {})
       @series_id = series_id

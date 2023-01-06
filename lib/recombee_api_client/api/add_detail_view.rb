@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Adds a detail view of a given item made by a given user.
+  #Adds a detail view of the given item made by the given user.
   #
   class AddDetailView < ApiRequest
     attr_reader :user_id, :item_id, :timestamp, :duration, :cascade_create, :recomm_id, :additional_data

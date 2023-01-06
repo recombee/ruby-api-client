@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Creates new series in the database.
+  #Creates a new series in the database.
   class AddSeries < ApiRequest
     attr_reader :series_id
     attr_accessor :timeout

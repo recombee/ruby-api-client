@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Adding an user property is somehow equivalent to adding a column to the table of users. The users may be characterized by various properties of different types.
+  #Adding a user property is somehow equivalent to adding a column to the table of users. The users may be characterized by various properties of different types.
   #
   class AddUserProperty < ApiRequest
     attr_reader :property_name, :type
@@ -16,7 +16,7 @@ module RecombeeApiClient
   
   ##
   # * *Required arguments*
-  #   - +property_name+ -> Name of the user property to be created. Currently, the following names are reserved:`id`, `userid`, case insensitively. Also, the length of the property name must not exceed 63 characters.
+  #   - +property_name+ -> Name of the user property to be created. Currently, the following names are reserved: `id`, `userid`, case-insensitively. Also, the length of the property name must not exceed 63 characters.
   #
   #   - +type+ -> Value type of the user property to be created. One of: `int`, `double`, `string`, `boolean`, `timestamp`, `set`.
   #

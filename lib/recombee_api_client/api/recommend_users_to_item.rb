@@ -7,11 +7,11 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Recommend users that are likely to be interested in a given item.
+  #Recommends users that are likely to be interested in the given item.
   #
-  #It is also possible to use POST HTTP method (for example in case of very long ReQL filter) - query parameters then become body parameters.
+  #It is also possible to use POST HTTP method (for example in the case of a very long ReQL filter) - query parameters then become body parameters.
   #
-  #The returned users are sorted by predicted interest in the item (first user being the most interested).
+  #The returned users are sorted by predicted interest in the item (the first user being the most interested).
   #
   class RecommendUsersToItem < ApiRequest
     attr_reader :item_id, :count, :scenario, :cascade_create, :return_properties, :included_properties, :filter, :booster, :logic, :diversity, :expert_settings, :return_ab_group
@@ -24,14 +24,14 @@ module RecombeeApiClient
   #   - +count+ -> Number of items to be recommended (N for the top-N recommendation).
   #
   # * *Optional arguments (given as hash optional)*
-  #   - +scenario+ -> Scenario defines a particular application of recommendations. It can be for example "homepage", "cart" or "emailing".
+  #   - +scenario+ -> Scenario defines a particular application of recommendations. It can be, for example, "homepage", "cart", or "emailing".
   #
-  #You can set various settings to the [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com). You can also see performance of each scenario in the Admin UI separately, so you can check how well each application performs.
+  #You can set various settings to the [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com). You can also see the performance of each scenario in the Admin UI separately, so you can check how well each application performs.
   #
-  #The AI which optimizes models in order to get the best results may optimize different scenarios separately, or even use different models in each of the scenarios.
+  #The AI that optimizes models to get the best results may optimize different scenarios separately or even use different models in each of the scenarios.
   #
-  #   - +cascadeCreate+ -> If item of given *itemId* doesn't exist in the database, it creates the missing item.
-  #   - +returnProperties+ -> With `returnProperties=true`, property values of the recommended users are returned along with their IDs in a JSON dictionary. The acquired property values can be used for easy displaying the recommended users. 
+  #   - +cascadeCreate+ -> If an item of the given *itemId* doesn't exist in the database, it creates the missing item.
+  #   - +returnProperties+ -> With `returnProperties=true`, property values of the recommended users are returned along with their IDs in a JSON dictionary. The acquired property values can be used to easily display the recommended users. 
   #
   #Example response:
   #```
@@ -58,7 +58,7 @@ module RecombeeApiClient
   #  }
   #```
   #
-  #   - +includedProperties+ -> Allows to specify, which properties should be returned when `returnProperties=true` is set. The properties are given as a comma-separated list. 
+  #   - +includedProperties+ -> Allows specifying which properties should be returned when `returnProperties=true` is set. The properties are given as a comma-separated list.
   #
   #Example response for `includedProperties=country`:
   #```
@@ -83,26 +83,26 @@ module RecombeeApiClient
   #  }
   #```
   #
-  #   - +filter+ -> Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to filter recommended items based on the values of their attributes.
+  #   - +filter+ -> Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to filter recommended items based on the values of their attributes.
   #
-  #Filters can be also assigned to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
+  #Filters can also be assigned to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
   #
-  #   - +booster+ -> Number-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to boost recommendation rate of some items based on the values of their attributes.
+  #   - +booster+ -> Number-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to boost the recommendation rate of some items based on the values of their attributes.
   #
-  #Boosters can be also assigned to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
+  #Boosters can also be assigned to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
   #
-  #   - +logic+ -> Logic specifies particular behavior of the recommendation models. You can pick tailored logic for your domain and use case.
-  #See [this section](https://docs.recombee.com/recommendation_logics.html) for list of available logics and other details.
+  #   - +logic+ -> Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case.
+  #See [this section](https://docs.recombee.com/recommendation_logics.html) for a list of available logics and other details.
   #
   #The difference between `logic` and `scenario` is that `logic` specifies mainly behavior, while `scenario` specifies the place where recommendations are shown to the users.
   #
-  #Logic can be also set to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
+  #Logic can also be set to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
   #
-  #   - +diversity+ -> **Expert option** Real number from [0.0, 1.0] which determines how much mutually dissimilar should the recommended items be. The default value is 0.0, i.e., no diversification. Value 1.0 means maximal diversification.
+  #   - +diversity+ -> **Expert option** Real number from [0.0, 1.0], which determines how mutually dissimilar the recommended items should be. The default value is 0.0, i.e., no diversification. Value 1.0 means maximal diversification.
   #
   #   - +expertSettings+ -> Dictionary of custom options.
   #
-  #   - +returnAbGroup+ -> If there is a custom AB-testing running, return name of group to which the request belongs.
+  #   - +returnAbGroup+ -> If there is a custom AB-testing running, return the name of the group to which the request belongs.
   #
   #
     def initialize(item_id, count, optional = {})

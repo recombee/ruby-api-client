@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Deletes an existing cart addition uniquely specified by `userId`, `itemId`, and `timestamp` or all the cart additions with given `userId` and `itemId` if `timestamp` is omitted.
+  #Deletes an existing cart addition uniquely specified by `userId`, `itemId`, and `timestamp` or all the cart additions with the given `userId` and `itemId` if `timestamp` is omitted.
   #
   class DeleteCartAddition < ApiRequest
     attr_reader :user_id, :item_id, :timestamp
@@ -17,10 +17,10 @@ module RecombeeApiClient
   ##
   # * *Required arguments*
   #   - +user_id+ -> ID of the user who made the cart addition.
-  #   - +item_id+ -> ID of the item of which was added to cart.
+  #   - +item_id+ -> ID of the item which was added to the cart.
   #
   # * *Optional arguments (given as hash optional)*
-  #   - +timestamp+ -> Unix timestamp of the cart addition. If the `timestamp` is omitted, then all the cart additions with given `userId` and `itemId` are deleted.
+  #   - +timestamp+ -> Unix timestamp of the cart addition. If the `timestamp` is omitted, then all the cart additions with the given `userId` and `itemId` are deleted.
   #
     def initialize(user_id, item_id, optional = {})
       @user_id = user_id

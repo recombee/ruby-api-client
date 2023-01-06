@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #List all the bookmarks ever made by a given user.
+  #Lists all the bookmarks ever made by the given user.
   class ListUserBookmarks < ApiRequest
     attr_reader :user_id
     attr_accessor :timeout

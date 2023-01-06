@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Adds a purchase of a given item made by a given user.
+  #Adds a purchase of the given item made by the given user.
   #
   class AddPurchase < ApiRequest
     attr_reader :user_id, :item_id, :timestamp, :cascade_create, :amount, :price, :profit, :recomm_id, :additional_data
@@ -22,9 +22,9 @@ module RecombeeApiClient
   # * *Optional arguments (given as hash optional)*
   #   - +timestamp+ -> UTC timestamp of the purchase as ISO8601-1 pattern or UTC epoch time. The default value is the current time.
   #   - +cascadeCreate+ -> Sets whether the given user/item should be created if not present in the database.
-  #   - +amount+ -> Amount (number) of purchased items. The default is 1. For example if `user-x` purchases two `item-y` during a single order (session...), the `amount` should equal to 2.
-  #   - +price+ -> Price paid by the user for the item. If `amount` is greater than 1, sum of prices of all the items should be given.
-  #   - +profit+ -> Your profit from the purchased item. The profit is natural in e-commerce domain (for example if `user-x` purchases `item-y` for $100 and the gross margin is 30 %, then the profit is $30), but is applicable also in other domains (for example at a news company it may be income from displayed advertisement on article page). If `amount` is greater than 1, sum of profit of all the items should be given.
+  #   - +amount+ -> Amount (number) of purchased items. The default is 1. For example, if `user-x` purchases two `item-y` during a single order (session...), the `amount` should equal 2.
+  #   - +price+ -> Price paid by the user for the item. If `amount` is greater than 1, the sum of prices of all the items should be given.
+  #   - +profit+ -> Your profit from the purchased item. The profit is natural in the e-commerce domain (for example, if `user-x` purchases `item-y` for $100 and the gross margin is 30 %, then the profit is $30) but is also applicable in other domains (for example, at a news company it may be income from a displayed advertisement on article page). If `amount` is greater than 1, the sum of profit of all the items should be given.
   #   - +recommId+ -> If this purchase is based on a recommendation request, `recommId` is the id of the clicked recommendation.
   #   - +additionalData+ -> A dictionary of additional data for the interaction.
   #

@@ -11,16 +11,16 @@ module RecombeeApiClient
   #
   #All the string and set item properties are indexed by the search engine.
   #
-  #This endpoint should be used in a search box at your website/app. It can be called multiple times as the user is typing the query in order to get the most viable suggestions based on current state of the query, or once after submitting the whole query. 
+  #This endpoint should be used in a search box on your website/app. It can be called multiple times as the user is typing the query in order to get the most viable suggestions based on the current state of the query, or once after submitting the whole query. 
   #
-  #The returned items are sorted by relevance (first item being the most relevant).
+  #The returned items are sorted by relevance (the first item being the most relevant).
   #
   #Besides the recommended items, also a unique `recommId` is returned in the response. It can be used to:
   #
-  #- Let Recombee know that this search was successful (e.g. user clicked one of the recommended items). See [Reported metrics](https://docs.recombee.com/admin_ui.html#reported-metrics).
+  #- Let Recombee know that this search was successful (e.g., user clicked one of the recommended items). See [Reported metrics](https://docs.recombee.com/admin_ui.html#reported-metrics).
   #- Get subsequent search results when the user scrolls down or goes to the next page. See [Recommend Next Items](https://docs.recombee.com/api.html#recommend-next-items).
   #
-  #It is also possible to use POST HTTP method (for example in case of very long ReQL filter) - query parameters then become body parameters.
+  #It is also possible to use POST HTTP method (for example in the case of a very long ReQL filter) - query parameters then become body parameters.
   #
   class SearchItems < ApiRequest
     attr_reader :user_id, :search_query, :count, :scenario, :cascade_create, :return_properties, :included_properties, :filter, :booster, :logic, :expert_settings, :return_ab_group
@@ -36,12 +36,12 @@ module RecombeeApiClient
   # * *Optional arguments (given as hash optional)*
   #   - +scenario+ -> Scenario defines a particular search field in your user interface.
   #
-  #You can set various settings to the [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com). You can also see performance of each scenario in the Admin UI separately, so you can check how well each field performs.
+  #You can set various settings to the [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com). You can also see the performance of each scenario in the Admin UI separately, so you can check how well each field performs.
   #
-  #The AI which optimizes models in order to get the best results may optimize different scenarios separately, or even use different models in each of the scenarios.
+  #The AI that optimizes models to get the best results may optimize different scenarios separately, or even use different models in each of the scenarios.
   #
-  #   - +cascadeCreate+ -> If the user does not exist in the database, returns a list of non-personalized search results and creates the user in the database. This allows for example rotations in the following recommendations for that user, as the user will be already known to the system.
-  #   - +returnProperties+ -> With `returnProperties=true`, property values of the recommended items are returned along with their IDs in a JSON dictionary. The acquired property values can be used for easy displaying of the recommended items to the user. 
+  #   - +cascadeCreate+ -> If the user does not exist in the database, returns a list of non-personalized search results and creates the user in the database. This allows, for example, rotations in the following recommendations for that user, as the user will be already known to the system.
+  #   - +returnProperties+ -> With `returnProperties=true`, property values of the recommended items are returned along with their IDs in a JSON dictionary. The acquired property values can be used to easily display the recommended items to the user. 
   #
   #Example response:
   #```
@@ -72,7 +72,7 @@ module RecombeeApiClient
   #  }
   #```
   #
-  #   - +includedProperties+ -> Allows to specify, which properties should be returned when `returnProperties=true` is set. The properties are given as a comma-separated list. 
+  #   - +includedProperties+ -> Allows specifying which properties should be returned when `returnProperties=true` is set. The properties are given as a comma-separated list.
   #
   #Example response for `includedProperties=description,price`:
   #```
@@ -99,24 +99,24 @@ module RecombeeApiClient
   #  }
   #```
   #
-  #   - +filter+ -> Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to filter recommended items based on the values of their attributes.
+  #   - +filter+ -> Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to filter recommended items based on the values of their attributes.
   #
-  #Filters can be also assigned to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
+  #Filters can also be assigned to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
   #
-  #   - +booster+ -> Number-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to boost recommendation rate of some items based on the values of their attributes.
+  #   - +booster+ -> Number-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to boost the recommendation rate of some items based on the values of their attributes.
   #
-  #Boosters can be also assigned to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
+  #Boosters can also be assigned to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
   #
-  #   - +logic+ -> Logic specifies particular behavior of the recommendation models. You can pick tailored logic for your domain and use case.
-  #See [this section](https://docs.recombee.com/recommendation_logics.html) for list of available logics and other details.
+  #   - +logic+ -> Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case.
+  #See [this section](https://docs.recombee.com/recommendation_logics.html) for a list of available logics and other details.
   #
   #The difference between `logic` and `scenario` is that `logic` specifies mainly behavior, while `scenario` specifies the place where recommendations are shown to the users.
   #
-  #Logic can be also set to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
+  #Logic can also be set to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
   #
   #   - +expertSettings+ -> Dictionary of custom options.
   #
-  #   - +returnAbGroup+ -> If there is a custom AB-testing running, return name of group to which the request belongs.
+  #   - +returnAbGroup+ -> If there is a custom AB-testing running, return the name of the group to which the request belongs.
   #
   #
     def initialize(user_id, search_query, count, optional = {})

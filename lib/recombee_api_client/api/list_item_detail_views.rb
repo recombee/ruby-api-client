@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #List all the detail views of a given item ever made by different users.
+  #Lists all the detail views of the given item ever made by different users.
   class ListItemDetailViews < ApiRequest
     attr_reader :item_id
     attr_accessor :timeout
@@ -15,7 +15,7 @@ module RecombeeApiClient
   
   ##
   # * *Required arguments*
-  #   - +item_id+ -> ID of the item of which the detail views are to be listed.
+  #   - +item_id+ -> ID of the item whose detail views are to be listed.
   #
   #
     def initialize(item_id)

@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #List all the view portions of an item ever submitted by different users.
+  #Lists all the view portions of an item ever submitted by different users.
   #
   class ListItemViewPortions < ApiRequest
     attr_reader :item_id
@@ -16,7 +16,7 @@ module RecombeeApiClient
   
   ##
   # * *Required arguments*
-  #   - +item_id+ -> ID of the item of which the view portions are to be listed.
+  #   - +item_id+ -> ID of the item whose view portions are to be listed.
   #
   #
     def initialize(item_id)

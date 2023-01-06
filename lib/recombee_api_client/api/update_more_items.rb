@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Update (some) property values of all the items that pass the filter.
+  #Updates (some) property values of all the items that pass the filter.
   #
   #Example: *Setting all the items that are older than a week as unavailable*
   #
@@ -25,8 +25,8 @@ module RecombeeApiClient
   
   ##
   # * *Required arguments*
-  #   - +filter+ -> A [ReQL](https://docs.recombee.com/reql.html) expression, which return `true` for the items that shall be updated.
-  #   - +changes+ -> A dictionary where the keys are properties which shall be updated.
+  #   - +filter+ -> A [ReQL](https://docs.recombee.com/reql.html) expression, which returns `true` for the items that shall be updated.
+  #   - +changes+ -> A dictionary where the keys are properties that shall be updated.
   #
     def initialize(filter, changes)
       @filter = filter

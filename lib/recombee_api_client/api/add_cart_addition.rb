@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Adds a cart addition of a given item made by a given user.
+  #Adds a cart addition of the given item made by the given user.
   #
   class AddCartAddition < ApiRequest
     attr_reader :user_id, :item_id, :timestamp, :cascade_create, :amount, :price, :recomm_id, :additional_data
@@ -22,8 +22,8 @@ module RecombeeApiClient
   # * *Optional arguments (given as hash optional)*
   #   - +timestamp+ -> UTC timestamp of the cart addition as ISO8601-1 pattern or UTC epoch time. The default value is the current time.
   #   - +cascadeCreate+ -> Sets whether the given user/item should be created if not present in the database.
-  #   - +amount+ -> Amount (number) added to cart. The default is 1. For example if `user-x` adds two `item-y` during a single order (session...), the `amount` should equal to 2.
-  #   - +price+ -> Price of the added item. If `amount` is greater than 1, sum of prices of all the items should be given.
+  #   - +amount+ -> Amount (number) added to cart. The default is 1. For example, if `user-x` adds two `item-y` during a single order (session...), the `amount` should equal 2.
+  #   - +price+ -> Price of the added item. If `amount` is greater than 1, the sum of prices of all the items should be given.
   #   - +recommId+ -> If this cart addition is based on a recommendation request, `recommId` is the id of the clicked recommendation.
   #   - +additionalData+ -> A dictionary of additional data for the interaction.
   #

@@ -41,7 +41,7 @@ module RecombeeApiClient
   #  ]
   #```
   #
-  #   - +includedProperties+ -> Allows to specify, which properties should be returned when `returnProperties=true` is set. The properties are given as a comma-separated list. 
+  #   - +includedProperties+ -> Allows specifying which properties should be returned when `returnProperties=true` is set. The properties are given as a comma-separated list.
   #
   #Example response for `includedProperties=description,price`:
   #```

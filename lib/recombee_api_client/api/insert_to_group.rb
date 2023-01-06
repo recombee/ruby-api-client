@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Inserts an existing item/group into group of given `groupId`.
+  #Inserts an existing item/group into a group of the given `groupId`.
   #
   class InsertToGroup < ApiRequest
     attr_reader :group_id, :item_type, :item_id, :cascade_create
@@ -21,7 +21,7 @@ module RecombeeApiClient
   #   - +item_id+ -> ID of the item iff `itemType` is `item`. ID of the group iff `itemType` is `group`.
   #
   # * *Optional arguments (given as hash optional)*
-  #   - +cascadeCreate+ -> Indicates that any non-existing entity specified within the request should be created (as is corresponding PUT requests were invoked). This concerns both the `groupId` and the `groupId`. If `cascadeCreate` is set true, the behavior also depends on the `itemType`. Either items or group may be created if not present in the database.
+  #   - +cascadeCreate+ -> Indicates that any non-existing entity specified within the request should be created (as if corresponding PUT requests were invoked). This concerns both the `groupId` and the `groupId`. If `cascadeCreate` is set to true, the behavior also depends on the `itemType`. Either items or group may be created if not present in the database.
   #
     def initialize(group_id, item_type, item_id, optional = {})
       @group_id = group_id

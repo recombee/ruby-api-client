@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #List all the purchases ever made by a given user.
+  #Lists all the purchases ever made by the given user.
   class ListUserPurchases < ApiRequest
     attr_reader :user_id
     attr_accessor :timeout

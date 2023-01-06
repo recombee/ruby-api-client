@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #List all the ever-made bookmarks of a given item.
+  #Lists all the ever-made bookmarks of the given item.
   class ListItemBookmarks < ApiRequest
     attr_reader :item_id
     attr_accessor :timeout
@@ -15,7 +15,7 @@ module RecombeeApiClient
   
   ##
   # * *Required arguments*
-  #   - +item_id+ -> ID of the item of which the bookmarks are to be listed.
+  #   - +item_id+ -> ID of the item whose bookmarks are to be listed.
   #
   #
     def initialize(item_id)

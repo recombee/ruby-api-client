@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #List all the cart additions ever made by a given user.
+  #Lists all the cart additions ever made by the given user.
   class ListUserCartAdditions < ApiRequest
     attr_reader :user_id
     attr_accessor :timeout

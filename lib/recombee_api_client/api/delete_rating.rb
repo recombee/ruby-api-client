@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Deletes an existing rating specified by (`userId`, `itemId`, `timestamp`) from the database or all the ratings with given `userId` and `itemId` if `timestamp` is omitted.
+  #Deletes an existing rating specified by (`userId`, `itemId`, `timestamp`) from the database or all the ratings with the given `userId` and `itemId` if `timestamp` is omitted.
   #
   class DeleteRating < ApiRequest
     attr_reader :user_id, :item_id, :timestamp
@@ -20,7 +20,7 @@ module RecombeeApiClient
   #   - +item_id+ -> ID of the item which was rated.
   #
   # * *Optional arguments (given as hash optional)*
-  #   - +timestamp+ -> Unix timestamp of the rating. If the `timestamp` is omitted, then all the ratings with given `userId` and `itemId` are deleted.
+  #   - +timestamp+ -> Unix timestamp of the rating. If the `timestamp` is omitted, then all the ratings with the given `userId` and `itemId` are deleted.
   #
     def initialize(user_id, item_id, optional = {})
       @user_id = user_id

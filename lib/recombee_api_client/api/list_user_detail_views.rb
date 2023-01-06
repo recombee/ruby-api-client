@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Lists all the detail views of different items ever made by a given user.
+  #Lists all the detail views of different items ever made by the given user.
   class ListUserDetailViews < ApiRequest
     attr_reader :user_id
     attr_accessor :timeout

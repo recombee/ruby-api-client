@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Adds a bookmark of a given item made by a given user.
+  #Adds a bookmark of the given item made by the given user.
   #
   class AddBookmark < ApiRequest
     attr_reader :user_id, :item_id, :timestamp, :cascade_create, :recomm_id, :additional_data

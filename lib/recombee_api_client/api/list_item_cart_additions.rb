@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #List all the ever-made cart addition of a given item.
+  #Lists all the ever-made cart additions of the given item.
   class ListItemCartAdditions < ApiRequest
     attr_reader :item_id
     attr_accessor :timeout
@@ -15,7 +15,7 @@ module RecombeeApiClient
   
   ##
   # * *Required arguments*
-  #   - +item_id+ -> ID of the item of which the cart addition are to be listed.
+  #   - +item_id+ -> ID of the item whose cart additions are to be listed.
   #
   #
     def initialize(item_id)

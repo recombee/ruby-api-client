@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Creates new group in the database.
+  #Creates a new group in the database.
   class AddGroup < ApiRequest
     attr_reader :group_id
     attr_accessor :timeout

@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Deletes an existing purchase uniquely specified by `userId`, `itemId`, and `timestamp` or all the purchases with given `userId` and `itemId` if `timestamp` is omitted.
+  #Deletes an existing purchase uniquely specified by `userId`, `itemId`, and `timestamp` or all the purchases with the given `userId` and `itemId` if `timestamp` is omitted.
   #
   class DeletePurchase < ApiRequest
     attr_reader :user_id, :item_id, :timestamp
@@ -17,10 +17,10 @@ module RecombeeApiClient
   ##
   # * *Required arguments*
   #   - +user_id+ -> ID of the user who made the purchase.
-  #   - +item_id+ -> ID of the item of which was purchased.
+  #   - +item_id+ -> ID of the item which was purchased.
   #
   # * *Optional arguments (given as hash optional)*
-  #   - +timestamp+ -> Unix timestamp of the purchase. If the `timestamp` is omitted, then all the purchases with given `userId` and `itemId` are deleted.
+  #   - +timestamp+ -> Unix timestamp of the purchase. If the `timestamp` is omitted, then all the purchases with the given `userId` and `itemId` are deleted.
   #
     def initialize(user_id, item_id, optional = {})
       @user_id = user_id

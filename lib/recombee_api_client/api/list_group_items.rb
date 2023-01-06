@@ -15,7 +15,7 @@ module RecombeeApiClient
   
   ##
   # * *Required arguments*
-  #   - +group_id+ -> ID of the group items of which are to be listed.
+  #   - +group_id+ -> ID of the group whose items are to be listed.
   #
     def initialize(group_id)
       @group_id = group_id
