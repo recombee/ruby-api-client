@@ -28,7 +28,7 @@ module RecombeeApiClient
       optional = normalize_optional(optional)
       @timestamp = optional['timestamp']
       @optional = optional
-      @timeout = 1000
+      @timeout = 3000
       @ensure_https = false
       @optional.each do |par, _|
         fail UnknownOptionalParameter.new(par) unless ["timestamp"].include? par

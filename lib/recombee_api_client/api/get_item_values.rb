@@ -21,7 +21,7 @@ module RecombeeApiClient
   #
     def initialize(item_id)
       @item_id = item_id
-      @timeout = 1000
+      @timeout = 3000
       @ensure_https = false
     end
   

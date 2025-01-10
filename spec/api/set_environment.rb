@@ -26,8 +26,6 @@ RSpec.shared_context 'set environment', a: :b do
         AddItem.new('entity_id'),
         AddUser.new('entity_id'),
         AddSeries.new('entity_id'),
-        AddGroup.new('entity_id'),
-        InsertToGroup.new('entity_id', 'item', 'entity_id'),
         InsertToSeries.new('entity_id', 'item', 'entity_id', 1),
         AddItemProperty.new('int_property', 'int'),
         AddItemProperty.new('str_property', 'string'),

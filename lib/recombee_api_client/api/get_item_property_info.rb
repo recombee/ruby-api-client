@@ -20,7 +20,7 @@ module RecombeeApiClient
   #
     def initialize(property_name)
       @property_name = property_name
-      @timeout = 1000
+      @timeout = 3000
       @ensure_https = false
     end
   

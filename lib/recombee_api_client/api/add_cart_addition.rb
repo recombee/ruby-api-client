@@ -38,7 +38,7 @@ module RecombeeApiClient
       @recomm_id = optional['recommId']
       @additional_data = optional['additionalData']
       @optional = optional
-      @timeout = 1000
+      @timeout = 3000
       @ensure_https = false
       @optional.each do |par, _|
         fail UnknownOptionalParameter.new(par) unless ["timestamp","cascadeCreate","amount","price","recommId","additionalData"].include? par

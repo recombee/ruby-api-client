@@ -4,7 +4,7 @@
 
 require 'spec_helper'
 require_relative 'set_environment'
-shared_examples 'recommend item segments to item segment' do
+shared_examples 'recommend to item segment' do
 include_context 'set environment'
 
   it 'rejects request to scenario which is not set up' do

@@ -12,7 +12,7 @@ module RecombeeApiClient
   #Deleting a series will only delete assignment of items to it, not the items themselves!
   #
   class DeleteSeries < ApiRequest
-    attr_reader :series_id
+    attr_reader :series_id, :cascade_delete
     attr_accessor :timeout
     attr_accessor :ensure_https
   
@@ -20,10 +20,19 @@ module RecombeeApiClient
   # * *Required arguments*
   #   - +series_id+ -> ID of the series to be deleted.
   #
-    def initialize(series_id)
+  # * *Optional arguments (given as hash optional)*
+  #   - +cascadeDelete+ -> If set to `true`, item with the same ID as seriesId will be also deleted. Default is `false`.
+  #
+    def initialize(series_id, optional = {})
       @series_id = series_id
-      @timeout = 1000
+      optional = normalize_optional(optional)
+      @cascade_delete = optional['cascadeDelete']
+      @optional = optional
+      @timeout = 3000
       @ensure_https = false
+      @optional.each do |par, _|
+        fail UnknownOptionalParameter.new(par) unless ["cascadeDelete"].include? par
+      end
     end
   
     # HTTP method
@@ -34,6 +43,7 @@ module RecombeeApiClient
     # Values of body parameters as a Hash
     def body_parameters
       p = Hash.new
+      p['cascadeDelete'] = @optional['cascadeDelete'] if @optional.include? 'cascadeDelete'
       p
     end
   

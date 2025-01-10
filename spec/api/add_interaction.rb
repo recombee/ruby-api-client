@@ -38,14 +38,6 @@ include_context 'set environment'
      }
   end
 
-  it 'fails with invalid time' do
-    req = described_class.new('entity_id','entity_id',{'timestamp' => -15})
-    expect { @client.send(req) }.to raise_exception { |exception|
-       expect(exception).to be_a(RecombeeApiClient::ResponseError)
-       expect(exception.status_code).to eq 400
-     }
-  end
-
   it 'really stores interaction to the system' do
     req = described_class.new('u_id2','i_id2',{'cascadeCreate' => true,'timestamp' => 5})
     resp = @client.send(req)

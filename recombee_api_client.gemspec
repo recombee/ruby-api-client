@@ -10,17 +10,19 @@ Gem::Specification.new do |spec|
   spec.email         = ['ondrej.fiedler@recombee.com']
 
   spec.summary       = 'Client for Recombee recommendation API'
-  spec.homepage      = 'http://recombee.com'
+  spec.description   = 'A Ruby client for accessing the Recombee recommendation API. Supports personalization and search capabilities with ease.'
+  spec.homepage      = 'https://recombee.com'
   spec.license       = 'MIT'
-  spec.required_ruby_version = '>= 1.9.0'
+
+  spec.required_ruby_version = '>= 2.5.0'
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'multi_json'
-  spec.add_dependency 'httparty'
+  spec.add_dependency 'multi_json', '~> 1.15'
+  spec.add_dependency 'httparty', '~> 0.18'
 
-  spec.add_development_dependency 'bundler', '~> 2.2.10'
-  spec.add_development_dependency 'rake', '~> 12.3.3'
-  spec.add_development_dependency 'rspec'
+  spec.add_development_dependency 'bundler', '~> 2.6.2'
+  spec.add_development_dependency 'rake', '~> 13.0'
+  spec.add_development_dependency 'rspec', '~> 3.11'
 end

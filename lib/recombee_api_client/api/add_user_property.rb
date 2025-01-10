@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Adding a user property is somehow equivalent to adding a column to the table of users. The users may be characterized by various properties of different types.
+  #Adding a user property is somewhat equivalent to adding a column to the table of users. The users may be characterized by various properties of different types.
   #
   class AddUserProperty < ApiRequest
     attr_reader :property_name, :type

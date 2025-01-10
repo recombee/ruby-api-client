@@ -14,7 +14,7 @@ include_context 'set environment'
   end
 
   it 'return properties' do
-    req = described_class.new()
+    req = described_class.new({'returnProperties' => true})
     resp = @client.send(req)
     expect(resp.size).to eq 1
   end

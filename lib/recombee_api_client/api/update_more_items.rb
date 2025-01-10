@@ -31,7 +31,7 @@ module RecombeeApiClient
     def initialize(filter, changes)
       @filter = filter
       @changes = changes
-      @timeout = 1000
+      @timeout = 100000
       @ensure_https = false
     end
   

@@ -9,7 +9,7 @@ module RecombeeApiClient
   ##
   #Creates a new series in the database.
   class AddSeries < ApiRequest
-    attr_reader :series_id
+    attr_reader :series_id, :cascade_create
     attr_accessor :timeout
     attr_accessor :ensure_https
   
@@ -17,10 +17,19 @@ module RecombeeApiClient
   # * *Required arguments*
   #   - +series_id+ -> ID of the series to be created.
   #
-    def initialize(series_id)
+  # * *Optional arguments (given as hash optional)*
+  #   - +cascadeCreate+ -> If set to `true`, the item will be created with the same ID as the series. Default is `true`.
+  #
+    def initialize(series_id, optional = {})
       @series_id = series_id
-      @timeout = 1000
+      optional = normalize_optional(optional)
+      @cascade_create = optional['cascadeCreate']
+      @optional = optional
+      @timeout = 3000
       @ensure_https = false
+      @optional.each do |par, _|
+        fail UnknownOptionalParameter.new(par) unless ["cascadeCreate"].include? par
+      end
     end
   
     # HTTP method
@@ -31,6 +40,7 @@ module RecombeeApiClient
     # Values of body parameters as a Hash
     def body_parameters
       p = Hash.new
+      p['cascadeCreate'] = @optional['cascadeCreate'] if @optional.include? 'cascadeCreate'
       p
     end
   
