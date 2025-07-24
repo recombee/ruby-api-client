@@ -11,7 +11,7 @@ module RecombeeApiClient
   #
   #Example: *Setting all the items that are older than a week as unavailable*
   #
-  #  ```
+  #  ```json
   #    {
   #      "filter": "'releaseDate' < now() - 7*24*3600",
   #      "changes": {"available": false}
@@ -25,7 +25,7 @@ module RecombeeApiClient
   
   ##
   # * *Required arguments*
-  #   - +filter+ -> A [ReQL](https://docs.recombee.com/reql.html) expression, which returns `true` for the items that shall be updated.
+  #   - +filter+ -> A [ReQL](https://docs.recombee.com/reql) expression, which returns `true` for the items that shall be updated.
   #   - +changes+ -> A dictionary where the keys are properties that shall be updated.
   #
     def initialize(filter, changes)

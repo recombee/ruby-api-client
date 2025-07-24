@@ -16,13 +16,13 @@ module RecombeeApiClient
   ##
   #
   # * *Optional arguments (given as hash optional)*
-  #   - +filter+ -> Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to filter items to be listed. Only the items for which the expression is *true* will be returned.
+  #   - +filter+ -> Boolean-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to filter items to be listed. Only the items for which the expression is *true* will be returned.
   #   - +count+ -> The number of items to be listed.
   #   - +offset+ -> Specifies the number of items to skip (ordered by `itemId`).
   #   - +returnProperties+ -> With `returnProperties=true`, property values of the listed items are returned along with their IDs in a JSON dictionary. 
   #
   #Example response:
-  #```
+  #```json
   #  [
   #    {
   #      "itemId": "tv-178",
@@ -44,7 +44,7 @@ module RecombeeApiClient
   #   - +includedProperties+ -> Allows specifying which properties should be returned when `returnProperties=true` is set. The properties are given as a comma-separated list.
   #
   #Example response for `includedProperties=description,price`:
-  #```
+  #```json
   #  [
   #    {
   #      "itemId": "tv-178",

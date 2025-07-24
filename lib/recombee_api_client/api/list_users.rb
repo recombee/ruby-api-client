@@ -16,13 +16,13 @@ module RecombeeApiClient
   ##
   #
   # * *Optional arguments (given as hash optional)*
-  #   - +filter+ -> Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to filter users to be listed. Only the users for which the expression is *true* will be returned.
+  #   - +filter+ -> Boolean-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to filter users to be listed. Only the users for which the expression is *true* will be returned.
   #   - +count+ -> The number of users to be listed.
   #   - +offset+ -> Specifies the number of users to skip (ordered by `userId`).
   #   - +returnProperties+ -> With `returnProperties=true`, property values of the listed users are returned along with their IDs in a JSON dictionary. 
   #
   #Example response:
-  #```
+  #```json
   #  [
   #    {
   #      "userId": "user-81",
@@ -40,7 +40,7 @@ module RecombeeApiClient
   #   - +includedProperties+ -> Allows specifying which properties should be returned when `returnProperties=true` is set. The properties are given as a comma-separated list.
   #
   #Example response for `includedProperties=country`:
-  #```
+  #```json
   #  [
   #    {
   #      "userId": "user-81",

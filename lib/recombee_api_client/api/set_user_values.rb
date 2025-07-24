@@ -3,7 +3,7 @@ module RecombeeApiClient
   require_relative '../errors'
   
   ##
-  #Set/update (some) property values of a given user. The properties (columns) must be previously created by [Add user property](https://docs.recombee.com/api.html#add-user-property).
+  #Set/update (some) property values of a given user. The properties (columns) must be previously created by [Add user property](https://docs.recombee.com/api#add-user-property).
   #
   class SetUserValues < SetValues
     attr_reader :user_id

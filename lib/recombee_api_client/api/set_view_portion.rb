@@ -23,7 +23,7 @@ module RecombeeApiClient
   #
   # * *Optional arguments (given as hash optional)*
   #   - +sessionId+ -> ID of the session in which the user viewed the item. Default is `null` (`None`, `nil`, `NULL` etc., depending on the language).
-  #   - +timestamp+ -> UTC timestamp of the rating as ISO8601-1 pattern or UTC epoch time. The default value is the current time.
+  #   - +timestamp+ -> UTC timestamp of the view portion as ISO8601-1 pattern or UTC epoch time. The default value is the current time.
   #   - +cascadeCreate+ -> Sets whether the given user/item should be created if not present in the database.
   #   - +recommId+ -> If this view portion is based on a recommendation request, `recommId` is the id of the clicked recommendation.
   #   - +additionalData+ -> A dictionary of additional data for the interaction.
