@@ -3,8 +3,8 @@
 #
 
 require 'spec_helper'
-require_relative "add_rating"
+require_relative 'add_rating'
 
 describe RecombeeApiClient::AddRating do
-  it_behaves_like "add rating"
+  it_behaves_like 'add rating'
 end

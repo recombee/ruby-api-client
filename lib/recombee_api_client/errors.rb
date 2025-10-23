@@ -5,11 +5,9 @@ module RecombeeApiClient
 
   # Response is not 200 or 201
   class ResponseError < APIError
-    attr_reader :request
-    attr_reader :status_code
-    attr_reader :description
+    attr_reader :request, :status_code, :description
 
-    def initialize(request, status_code, description)
+    def initialize(_request, status_code, description)
       @status_code = status_code
       @description = description
     end
@@ -40,5 +38,4 @@ module RecombeeApiClient
       "ApiTimeout: client did not get response within #{@request.timeout} ms"
     end
   end
-
 end

@@ -3,8 +3,8 @@
 #
 
 require 'spec_helper'
-require_relative "recommendation"
+require_relative 'recommendation'
 
 describe RecombeeApiClient::RecommendItemsToUser do
-  it_behaves_like "recommendation"
+  it_behaves_like 'recommendation'
 end

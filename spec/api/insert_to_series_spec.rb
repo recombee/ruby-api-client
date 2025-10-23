@@ -3,8 +3,8 @@
 #
 
 require 'spec_helper'
-require_relative "insert_to_series"
+require_relative 'insert_to_series'
 
 describe RecombeeApiClient::InsertToSeries do
-  it_behaves_like "insert to series"
+  it_behaves_like 'insert to series'
 end

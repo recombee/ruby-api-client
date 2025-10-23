@@ -3,8 +3,8 @@
 #
 
 require 'spec_helper'
-require_relative "search"
+require_relative 'search'
 
 describe RecombeeApiClient::SearchItems do
-  it_behaves_like "search"
+  it_behaves_like 'search'
 end

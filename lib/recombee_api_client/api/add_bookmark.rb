@@ -5,30 +5,29 @@
 module RecombeeApiClient
   require_relative 'request'
   require_relative '../errors'
-  
+
   ##
-  #Adds a bookmark of the given item made by the given user.
+  # Adds a bookmark of the given item made by the given user.
   #
   class AddBookmark < ApiRequest
     attr_reader :user_id, :item_id, :timestamp, :cascade_create, :recomm_id, :additional_data
-    attr_accessor :timeout
-    attr_accessor :ensure_https
-  
-  ##
-  # * *Required arguments*
-  #   - +user_id+ -> User who bookmarked the item
-  #   - +item_id+ -> Bookmarked item
-  #
-  # * *Optional arguments (given as hash optional)*
-  #   - +timestamp+ -> UTC timestamp of the bookmark as ISO8601-1 pattern or UTC epoch time. The default value is the current time.
-  #   - +cascadeCreate+ -> Sets whether the given user/item should be created if not present in the database.
-  #   - +recommId+ -> If this bookmark is based on a recommendation request, `recommId` is the id of the clicked recommendation.
-  #   - +additionalData+ -> A dictionary of additional data for the interaction.
-  #
+    attr_accessor :timeout, :ensure_https
+
+    ##
+    # * *Required arguments*
+    #   - +user_id+ -> User who bookmarked the item
+    #   - +item_id+ -> Bookmarked item
+    #
+    # * *Optional arguments (given as hash optional)*
+    #   - +timestamp+ -> UTC timestamp of the bookmark as ISO8601-1 pattern or UTC epoch time. The default value is the current time.
+    #   - +cascadeCreate+ -> Sets whether the given user/item should be created if not present in the database.
+    #   - +recommId+ -> If this bookmark is based on a recommendation request, `recommId` is the id of the clicked recommendation.
+    #   - +additionalData+ -> A dictionary of additional data for the interaction.
+    #
     def initialize(user_id, item_id, optional = {})
       @user_id = user_id
       @item_id = item_id
-      optional = normalize_optional(optional)
+      optional = normalize_hash_to_camel_case(optional)
       @timestamp = optional['timestamp']
       @cascade_create = optional['cascadeCreate']
       @recomm_id = optional['recommId']
@@ -37,37 +36,38 @@ module RecombeeApiClient
       @timeout = 3000
       @ensure_https = false
       @optional.each do |par, _|
-        fail UnknownOptionalParameter.new(par) unless ["timestamp","cascadeCreate","recommId","additionalData"].include? par
+        raise UnknownOptionalParameter.new(par) unless %w[timestamp cascadeCreate recommId
+                                                          additionalData].include? par
       end
     end
-  
+
     # HTTP method
     def method
       :post
     end
-  
+
     # Values of body parameters as a Hash
     def body_parameters
-      p = Hash.new
+      p = {}
       p['userId'] = @user_id
       p['itemId'] = @item_id
       p['timestamp'] = @optional['timestamp'] if @optional.include? 'timestamp'
       p['cascadeCreate'] = @optional['cascadeCreate'] if @optional.include? 'cascadeCreate'
       p['recommId'] = @optional['recommId'] if @optional.include? 'recommId'
       p['additionalData'] = @optional['additionalData'] if @optional.include? 'additionalData'
+
       p
     end
-  
+
     # Values of query parameters as a Hash.
     # name of parameter => value of the parameter
     def query_parameters
-      params = {}
-      params
+      {}
     end
-  
+
     # Relative path to the endpoint
     def path
-      "/{databaseId}/bookmarks/"
+      '/{databaseId}/bookmarks/'
     end
   end
 end

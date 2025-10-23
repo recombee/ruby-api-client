@@ -3,8 +3,8 @@
 #
 
 require 'spec_helper'
-require_relative "get_segmentation"
+require_relative 'get_segmentation'
 
 describe RecombeeApiClient::GetSegmentation do
-  it_behaves_like "get segmentation"
+  it_behaves_like 'get segmentation'
 end

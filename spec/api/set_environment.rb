@@ -4,11 +4,10 @@ include RecombeeApiClient
 
 RSpec.shared_context 'set environment', a: :b do
   before(:each) do
-
     db_id = ENV['DB_ID'] || raise('DB_ID env var must be specified')
     token = ENV['PRIVATE_TOKEN'] || raise('PRIVATE_TOKEN env var must be specified')
 
-    @client = RecombeeClient.new(db_id, token, {:region => 'eu-west'})
+    @client = RecombeeClient.new(db_id, token, { region: 'eu-west' })
 
     @client.send(ResetDatabase.new)
 
@@ -23,17 +22,17 @@ RSpec.shared_context 'set environment', a: :b do
     end
 
     requests = Batch.new([
-        AddItem.new('entity_id'),
-        AddUser.new('entity_id'),
-        AddSeries.new('entity_id'),
-        InsertToSeries.new('entity_id', 'item', 'entity_id', 1),
-        AddItemProperty.new('int_property', 'int'),
-        AddItemProperty.new('str_property', 'string'),
-        SetItemValues.new('entity_id', {'int_property' => 42, 'str_property' => 'hello'}),
-        AddUserProperty.new('int_property', 'int'),
-        AddUserProperty.new('str_property', 'string'),
-        SetUserValues.new('entity_id', {'int_property' => 42, 'str_property' => 'hello'})        
-    ])
+                           AddItem.new('entity_id'),
+                           AddUser.new('entity_id'),
+                           AddSeries.new('entity_id'),
+                           InsertToSeries.new('entity_id', 'item', 'entity_id', 1),
+                           AddItemProperty.new('int_property', 'int'),
+                           AddItemProperty.new('str_property', 'string'),
+                           SetItemValues.new('entity_id', { 'int_property' => 42, 'str_property' => 'hello' }),
+                           AddUserProperty.new('int_property', 'int'),
+                           AddUserProperty.new('str_property', 'string'),
+                           SetUserValues.new('entity_id', { 'int_property' => 42, 'str_property' => 'hello' })
+                         ])
 
     @client.send(requests)
   end
@@ -41,25 +40,23 @@ end
 
 RSpec.shared_context 'set interactions', a: :b do
   before(:each) do
-
     requests = Batch.new([
 
-        AddUser.new('user'),
-        AddItem.new('item'),
-        AddDetailView.new('user', 'item', 'timestamp' => 0),
-        AddPurchase.new('user', 'item', 'timestamp' => 0),
-        AddRating.new('user', 'item', -1, 'timestamp' => 0),
-        AddCartAddition.new('user', 'item', 'timestamp' => 0),
-        AddBookmark.new('user', 'item', 'timestamp' => 0),
-        SetViewPortion.new('user', 'item', 1, 'timestamp' => 0)
-    ])
+                           AddUser.new('user'),
+                           AddItem.new('item'),
+                           AddDetailView.new('user', 'item', 'timestamp' => 0),
+                           AddPurchase.new('user', 'item', 'timestamp' => 0),
+                           AddRating.new('user', 'item', -1, 'timestamp' => 0),
+                           AddCartAddition.new('user', 'item', 'timestamp' => 0),
+                           AddBookmark.new('user', 'item', 'timestamp' => 0),
+                           SetViewPortion.new('user', 'item', 1, 'timestamp' => 0)
+                         ])
 
     @client.send(requests)
   end
 end
 
 RSpec.shared_context 'set recomm entities', a: :b do
-
   before(:each) do
     num = 100
     probability_purchased = 0.1
@@ -74,9 +71,11 @@ RSpec.shared_context 'set recomm entities', a: :b do
     end
 
     @client.send(Batch.new(my_users.map { |userId| AddUser.new(userId) }))
-    @client.send(Batch.new([AddItemProperty.new('answer', 'int'), AddItemProperty.new('id2', 'string'), AddItemProperty.new('empty', 'string')]))
-    @client.send(Batch.new(my_items.map { |itemId| SetItemValues.new(itemId, {'answer' => 42, 'id2' => itemId, '!cascadeCreate' => true}) }))
+    @client.send(Batch.new([AddItemProperty.new('answer', 'int'), AddItemProperty.new('id2', 'string'),
+                            AddItemProperty.new('empty', 'string')]))
+    @client.send(Batch.new(my_items.map do |itemId|
+      SetItemValues.new(itemId, { 'answer' => 42, 'id2' => itemId, '!cascadeCreate' => true })
+    end))
     @client.send(Batch.new(my_purchases.map { |p| AddPurchase.new(p['userId'], p['itemId'], 'timestamp' => 0) }))
   end
-
 end

@@ -3,8 +3,8 @@
 #
 
 require 'spec_helper'
-require_relative "delete_segmentation"
+require_relative 'delete_segmentation'
 
 describe RecombeeApiClient::DeleteSegmentation do
-  it_behaves_like "delete segmentation"
+  it_behaves_like 'delete segmentation'
 end

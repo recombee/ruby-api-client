@@ -5,7 +5,7 @@
 require 'spec_helper'
 require_relative 'set_environment'
 shared_examples 'get values' do
-include_context 'set environment'
+  include_context 'set environment'
 
   it 'gets values' do
     req = described_class.new('entity_id')
@@ -13,5 +13,4 @@ include_context 'set environment'
     expect(resp['int_property']).to eq 42
     expect(resp['str_property']).to eq 'hello'
   end
-
 end

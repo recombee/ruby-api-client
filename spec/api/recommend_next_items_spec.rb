@@ -3,8 +3,8 @@
 #
 
 require 'spec_helper'
-require_relative "next_items_recommendation"
+require_relative 'next_items_recommendation'
 
 describe RecombeeApiClient::RecommendNextItems do
-  it_behaves_like "next items recommendation"
+  it_behaves_like 'next items recommendation'
 end

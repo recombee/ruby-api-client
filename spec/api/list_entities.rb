@@ -5,12 +5,11 @@
 require 'spec_helper'
 require_relative 'set_environment'
 shared_examples 'list entities' do
-include_context 'set environment'
+  include_context 'set environment'
 
   it 'lists entities' do
-    req = described_class.new()
+    req = described_class.new
     resp = @client.send(req)
     expect(resp).to eq ['entity_id']
   end
-
 end

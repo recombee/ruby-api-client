@@ -3,8 +3,8 @@
 #
 
 require 'spec_helper'
-require_relative "merge_users"
+require_relative 'merge_users'
 
 describe RecombeeApiClient::MergeUsers do
-  it_behaves_like "merge users"
+  it_behaves_like 'merge users'
 end

@@ -3,8 +3,8 @@
 #
 
 require 'spec_helper'
-require_relative "delete_view_portion"
+require_relative 'delete_view_portion'
 
 describe RecombeeApiClient::DeleteViewPortion do
-  it_behaves_like "delete view portion"
+  it_behaves_like 'delete view portion'
 end

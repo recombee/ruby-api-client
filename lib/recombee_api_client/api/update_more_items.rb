@@ -5,11 +5,11 @@
 module RecombeeApiClient
   require_relative 'request'
   require_relative '../errors'
-  
+
   ##
-  #Updates (some) property values of all the items that pass the filter.
+  # Updates (some) property values of all the items that pass the filter.
   #
-  #Example: *Setting all the items that are older than a week as unavailable*
+  # Example: *Setting all the items that are older than a week as unavailable*
   #
   #  ```json
   #    {
@@ -20,44 +20,43 @@ module RecombeeApiClient
   #
   class UpdateMoreItems < ApiRequest
     attr_reader :filter, :changes
-    attr_accessor :timeout
-    attr_accessor :ensure_https
-  
-  ##
-  # * *Required arguments*
-  #   - +filter+ -> A [ReQL](https://docs.recombee.com/reql) expression, which returns `true` for the items that shall be updated.
-  #   - +changes+ -> A dictionary where the keys are properties that shall be updated.
-  #
+    attr_accessor :timeout, :ensure_https
+
+    ##
+    # * *Required arguments*
+    #   - +filter+ -> A [ReQL](https://docs.recombee.com/reql) expression, which returns `true` for the items that shall be updated.
+    #   - +changes+ -> A dictionary where the keys are properties that shall be updated.
+    #
     def initialize(filter, changes)
       @filter = filter
       @changes = changes
-      @timeout = 100000
+      @timeout = 100_000
       @ensure_https = false
     end
-  
+
     # HTTP method
     def method
       :post
     end
-  
+
     # Values of body parameters as a Hash
     def body_parameters
-      p = Hash.new
+      p = {}
       p['filter'] = @filter
       p['changes'] = @changes
+
       p
     end
-  
+
     # Values of query parameters as a Hash.
     # name of parameter => value of the parameter
     def query_parameters
-      params = {}
-      params
+      {}
     end
-  
+
     # Relative path to the endpoint
     def path
-      "/{databaseId}/more-items/"
+      '/{databaseId}/more-items/'
     end
   end
 end

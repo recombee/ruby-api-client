@@ -5,63 +5,62 @@
 module RecombeeApiClient
   require_relative 'request'
   require_relative '../errors'
-  
+
   ##
-  #Returns items that shall be shown to a user as next recommendations when the user e.g. scrolls the page down (*infinite scroll*) or goes to the next page.
+  # Returns items that shall be shown to a user as next recommendations when the user e.g. scrolls the page down (*infinite scroll*) or goes to the next page.
   #
-  #It accepts `recommId` of a base recommendation request (e.g., request from the first page) and the number of items that shall be returned (`count`).
-  #The base request can be one of:
+  # It accepts `recommId` of a base recommendation request (e.g., request from the first page) and the number of items that shall be returned (`count`).
+  # The base request can be one of:
   #  - [Recommend Items to Item](https://docs.recombee.com/api#recommend-items-to-item)
   #  - [Recommend Items to User](https://docs.recombee.com/api#recommend-items-to-user)
   #  - [Recommend Items to Item Segment](https://docs.recombee.com/api#recommend-items-to-item-segment)
   #  - [Search Items](https://docs.recombee.com/api#search-items)
   #
-  #All the other parameters are inherited from the base request.
+  # All the other parameters are inherited from the base request.
   #
-  #*Recommend next items* can be called many times for a single `recommId` and each call returns different (previously not recommended) items.
-  #The number of *Recommend next items* calls performed so far is returned in the `numberNextRecommsCalls` field.
+  # *Recommend next items* can be called many times for a single `recommId` and each call returns different (previously not recommended) items.
+  # The number of *Recommend next items* calls performed so far is returned in the `numberNextRecommsCalls` field.
   #
-  #*Recommend next items* can be requested up to 30 minutes after the base request or a previous *Recommend next items* call.
+  # *Recommend next items* can be requested up to 30 minutes after the base request or a previous *Recommend next items* call.
   #
-  #For billing purposes, each call to *Recommend next items* is counted as a separate recommendation request.
+  # For billing purposes, each call to *Recommend next items* is counted as a separate recommendation request.
   #
   class RecommendNextItems < ApiRequest
     attr_reader :recomm_id, :count
-    attr_accessor :timeout
-    attr_accessor :ensure_https
-  
-  ##
-  # * *Required arguments*
-  #   - +recomm_id+ -> ID of the base recommendation request for which next recommendations should be returned
-  #   - +count+ -> Number of items to be recommended
-  #
-  #
+    attr_accessor :timeout, :ensure_https
+
+    ##
+    # * *Required arguments*
+    #   - +recomm_id+ -> ID of the base recommendation request for which next recommendations should be returned
+    #   - +count+ -> Number of items to be recommended
+    #
+    #
     def initialize(recomm_id, count)
       @recomm_id = recomm_id
       @count = count
       @timeout = 3000
       @ensure_https = false
     end
-  
+
     # HTTP method
     def method
       :post
     end
-  
+
     # Values of body parameters as a Hash
     def body_parameters
-      p = Hash.new
+      p = {}
       p['count'] = @count
+
       p
     end
-  
+
     # Values of query parameters as a Hash.
     # name of parameter => value of the parameter
     def query_parameters
-      params = {}
-      params
+      {}
     end
-  
+
     # Relative path to the endpoint
     def path
       "/{databaseId}/recomms/next/items/#{@recomm_id}"

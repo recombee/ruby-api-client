@@ -3,8 +3,8 @@
 #
 
 require 'spec_helper'
-require_relative "list_scenarios"
+require_relative 'list_scenarios'
 
 describe RecombeeApiClient::ListScenarios do
-  it_behaves_like "list scenarios"
+  it_behaves_like 'list scenarios'
 end

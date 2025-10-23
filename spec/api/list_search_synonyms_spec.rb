@@ -3,8 +3,8 @@
 #
 
 require 'spec_helper'
-require_relative "list_search_synonyms"
+require_relative 'list_search_synonyms'
 
 describe RecombeeApiClient::ListSearchSynonyms do
-  it_behaves_like "list search synonyms"
+  it_behaves_like 'list search synonyms'
 end

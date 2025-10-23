@@ -3,8 +3,8 @@
 #
 
 require 'spec_helper'
-require_relative "get_property_info"
+require_relative 'get_property_info'
 
 describe RecombeeApiClient::GetUserPropertyInfo do
-  it_behaves_like "get property info"
+  it_behaves_like 'get property info'
 end

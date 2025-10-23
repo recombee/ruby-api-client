@@ -3,8 +3,8 @@
 #
 
 require 'spec_helper'
-require_relative "add_manual_reql_segment"
+require_relative 'add_manual_reql_segment'
 
 describe RecombeeApiClient::AddManualReqlSegment do
-  it_behaves_like "add manual reql segment"
+  it_behaves_like 'add manual reql segment'
 end

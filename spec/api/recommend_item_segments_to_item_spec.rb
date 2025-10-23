@@ -3,8 +3,8 @@
 #
 
 require 'spec_helper'
-require_relative "recommend_item_segments_to_item"
+require_relative 'recommend_item_segments_to_item'
 
 describe RecombeeApiClient::RecommendItemSegmentsToItem do
-  it_behaves_like "recommend item segments to item"
+  it_behaves_like 'recommend item segments to item'
 end

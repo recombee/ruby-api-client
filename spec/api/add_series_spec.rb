@@ -3,8 +3,8 @@
 #
 
 require 'spec_helper'
-require_relative "add_entity"
+require_relative 'add_entity'
 
 describe RecombeeApiClient::AddSeries do
-  it_behaves_like "add entity"
+  it_behaves_like 'add entity'
 end

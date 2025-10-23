@@ -3,8 +3,8 @@
 #
 
 require 'spec_helper'
-require_relative "delete_all_search_synonyms"
+require_relative 'delete_all_search_synonyms'
 
 describe RecombeeApiClient::DeleteAllSearchSynonyms do
-  it_behaves_like "delete all search synonyms"
+  it_behaves_like 'delete all search synonyms'
 end

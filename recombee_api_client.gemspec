@@ -1,5 +1,4 @@
-# coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'recombee_api_client/version'
 
@@ -19,8 +18,8 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'multi_json', '~> 1.15'
   spec.add_dependency 'httparty', '~> 0.18'
+  spec.add_dependency 'multi_json', '~> 1.15'
 
   spec.add_development_dependency 'bundler', '~> 2.6.2'
   spec.add_development_dependency 'rake', '~> 13.0'
