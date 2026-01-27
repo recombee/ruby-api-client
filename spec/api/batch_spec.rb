@@ -25,13 +25,13 @@ describe RecombeeApiClient::Batch do
       ListItems.new('filter' => "'num' >= 99"),
       AddCartAddition.new('user', 'item2'),
       AddCartAddition.new('user', 'item2', 'cascadeCreate' => true),
-      RecommendItemsToUser.new('user_id', 25, filter: "'num'==68", cascade_create: True)
+      RecommendItemsToUser.new('user_id', 25, filter: "'num'==68", cascade_create: true)
     ]
     repl = @client.send(Batch.new(reqs))
 
     codes = repl.map { |r| r['code'] }
-    expect(codes).to match_array [200, 201, 201, 200, 409, 200, 200, 200, 200, 200, 404, 200]
-    expect(repl[12]['json']['recomms'][0].sort).to match_array ['item2']
+    expect(codes).to match_array [200, 201, 201, 200, 409, 200, 200, 200, 200, 200, 404, 200, 200]
+    expect(repl[12]['json']['recomms'][0]['id']).to eq 'item2'
   end
 
   it 'send large multi-part batch' do

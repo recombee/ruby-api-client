@@ -23,7 +23,7 @@ module RecombeeApiClient
   #
   class RecommendItemSegmentsToItemSegment < ApiRequest
     attr_reader :context_segment_id, :target_user_id, :count, :scenario, :cascade_create, :filter, :booster, :logic,
-                :expert_settings, :return_ab_group
+                :expert_settings, :return_ab_group, :reql_expressions
     attr_accessor :timeout, :ensure_https
 
     ##
@@ -74,6 +74,43 @@ module RecombeeApiClient
     #
     #   - +returnAbGroup+ -> If there is a custom AB-testing running, return the name of the group to which the request belongs.
     #
+    #   - +reqlExpressions+ -> A dictionary of [ReQL](https://docs.recombee.com/reql) expressions that will be executed for each recommended Item Segment.
+    # This can be used to compute additional properties of the recommended Item Segments.
+    #
+    # The keys are the names of the expressions, and the values are the actual ReQL expressions.
+    #
+    # Example request:
+    # ```json
+    # {
+    #  "reqlExpressions": {
+    #    "countItems": "size(segment_items(\"categories\", 'segmentId'))"
+    #  }
+    # }
+    # ```
+    #
+    # Example response:
+    # ```json
+    # {
+    #  "recommId": "a7ac55a4-8d6e-4f19-addc-abac4164d8a8",
+    #  "recomms":
+    #    [
+    #      {
+    #        "id": "category-fantasy-books",
+    #        "reqlEvaluations": {
+    #          "countItems": 486
+    #        }
+    #      },
+    #      {
+    #        "id": "category-sci-fi-costumes",
+    #        "reqlEvaluations": {
+    #          "countItems": 19
+    #        }
+    #      }
+    #    ],
+    #   "numberNextRecommsCalls": 0
+    # }
+    # ```
+    #
     #
     def initialize(context_segment_id, target_user_id, count, optional = {})
       @context_segment_id = context_segment_id
@@ -87,12 +124,13 @@ module RecombeeApiClient
       @logic = optional['logic']
       @expert_settings = optional['expertSettings']
       @return_ab_group = optional['returnAbGroup']
+      @reql_expressions = optional['reqlExpressions']
       @optional = optional
       @timeout = 3000
       @ensure_https = false
       @optional.each do |par, _|
         raise UnknownOptionalParameter.new(par) unless %w[scenario cascadeCreate filter booster logic
-                                                          expertSettings returnAbGroup].include? par
+                                                          expertSettings returnAbGroup reqlExpressions].include? par
       end
     end
 
@@ -114,6 +152,7 @@ module RecombeeApiClient
       p['logic'] = @optional['logic'] if @optional.include? 'logic'
       p['expertSettings'] = @optional['expertSettings'] if @optional.include? 'expertSettings'
       p['returnAbGroup'] = @optional['returnAbGroup'] if @optional.include? 'returnAbGroup'
+      p['reqlExpressions'] = @optional['reqlExpressions'] if @optional.include? 'reqlExpressions'
 
       p
     end
