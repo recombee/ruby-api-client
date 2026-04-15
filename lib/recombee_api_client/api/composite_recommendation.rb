@@ -7,7 +7,7 @@ module RecombeeApiClient
   require_relative '../errors'
 
   ##
-  # Composite Recommendation returns both a *source entity* (e.g., an Item or [Item Segment](https://docs.recombee.com/segmentations.html)) and a list of related recommendations in a single response.
+  # Composite Recommendation returns both a *source entity* (e.g., an Item or [Item Segment](https://docs.recombee.com/segmentations)) and a list of related recommendations in a single response.
   #
   # It is ideal for use cases such as personalized homepage sections (*Articles from <category>*), *Because You Watched <movie>*, or *Artists Related to Your Favorite Artist <artist>*.
   #
@@ -37,8 +37,8 @@ module RecombeeApiClient
   # See [this example](https://docs.recombee.com/api#composite-recommendation-example-setting-parameters-for-individual-stages) for more details.
   #
   class CompositeRecommendation < ApiRequest
-    attr_reader :scenario, :count, :item_id, :user_id, :logic, :segment_id, :cascade_create, :source_settings,
-                :result_settings, :expert_settings
+    attr_reader :scenario, :count, :item_id, :user_id, :logic, :segment_id, :search_query, :cascade_create,
+                :source_settings, :result_settings, :expert_settings
     attr_accessor :timeout, :ensure_https
 
     ##
@@ -66,6 +66,8 @@ module RecombeeApiClient
     #
     #   - +segmentId+ -> ID of the segment from `contextSegmentationId` for which the recommendations are to be generated.
     #
+    #   - +searchQuery+ -> Search query provided by the user. It is used for the full-text search. Only applicable if the *scenario* corresponds to a search scenario.
+    #
     #   - +cascadeCreate+ -> If the entity for the source recommendation does not exist in the database, returns a list of non-personalized recommendations and creates the user in the database. This allows, for example, rotations in the following recommendations for that entity, as the entity will be already known to the system.
     #
     #   - +sourceSettings+ -> Parameters applied for recommending the *Source* stage. The accepted parameters correspond with the recommendation sub-endpoint used to recommend the *Source*.
@@ -83,6 +85,7 @@ module RecombeeApiClient
       @user_id = optional['userId']
       @logic = optional['logic']
       @segment_id = optional['segmentId']
+      @search_query = optional['searchQuery']
       @cascade_create = optional['cascadeCreate']
       @source_settings = optional['sourceSettings']
       @result_settings = optional['resultSettings']
@@ -91,8 +94,8 @@ module RecombeeApiClient
       @timeout = 3000
       @ensure_https = false
       @optional.each do |par, _|
-        raise UnknownOptionalParameter.new(par) unless %w[itemId userId logic segmentId cascadeCreate
-                                                          sourceSettings resultSettings expertSettings].include? par
+        raise UnknownOptionalParameter.new(par) unless %w[itemId userId logic segmentId searchQuery
+                                                          cascadeCreate sourceSettings resultSettings expertSettings].include? par
       end
     end
 
@@ -110,6 +113,7 @@ module RecombeeApiClient
       p['userId'] = @optional['userId'] if @optional.include? 'userId'
       p['logic'] = @optional['logic'] if @optional.include? 'logic'
       p['segmentId'] = @optional['segmentId'] if @optional.include? 'segmentId'
+      p['searchQuery'] = @optional['searchQuery'] if @optional.include? 'searchQuery'
       p['cascadeCreate'] = @optional['cascadeCreate'] if @optional.include? 'cascadeCreate'
       p['sourceSettings'] = @optional['sourceSettings'] if @optional.include? 'sourceSettings'
       p['resultSettings'] = @optional['resultSettings'] if @optional.include? 'resultSettings'

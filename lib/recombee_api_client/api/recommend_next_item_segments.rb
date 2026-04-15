@@ -1,0 +1,69 @@
+#
+# This file is auto-generated, do not edit
+#
+
+module RecombeeApiClient
+  require_relative 'request'
+  require_relative '../errors'
+
+  ##
+  # Returns Item segments that shall be shown to a user as next recommendations when the user e.g. scrolls the page down (*infinite scroll*) or goes to the next page.
+  #
+  # It accepts `recommId` of a base recommendation request (e.g., request from the first page) and the number of segments that shall be returned (`count`).
+  # The base request can be one of:
+  #  - [Recommend Item Segments to Item](https://docs.recombee.com/api#recommend-item-segments-to-item)
+  #  - [Recommend Item Segments to User](https://docs.recombee.com/api#recommend-item-segments-to-user)
+  #  - [Recommend Item Segments to Item Segment](https://docs.recombee.com/api#recommend-item-segments-to-item-segment)
+  #  - [Search Item Segments](https://docs.recombee.com/api#search-item-segments)
+  #
+  # All the other parameters are inherited from the base request.
+  #
+  # *Recommend next Item segments* can be called many times for a single `recommId` and each call returns different (previously not recommended) segments.
+  # The number of *Recommend next Item segments* calls performed so far is returned in the `numberNextRecommsCalls` field.
+  #
+  # *Recommend next Item segments* can be requested up to 30 minutes after the base request or a previous *Recommend next Item segments* call.
+  #
+  # For billing purposes, each call to *Recommend next Item segments* is counted as a separate recommendation request.
+  #
+  class RecommendNextItemSegments < ApiRequest
+    attr_reader :recomm_id, :count
+    attr_accessor :timeout, :ensure_https
+
+    ##
+    # * *Required arguments*
+    #   - +recomm_id+ -> ID of the base recommendation request for which next recommendations should be returned
+    #   - +count+ -> Number of item segments to be recommended
+    #
+    #
+    def initialize(recomm_id, count)
+      @recomm_id = recomm_id
+      @count = count
+      @timeout = 3000
+      @ensure_https = false
+    end
+
+    # HTTP method
+    def method
+      :post
+    end
+
+    # Values of body parameters as a Hash
+    def body_parameters
+      p = {}
+      p['count'] = @count
+
+      p
+    end
+
+    # Values of query parameters as a Hash.
+    # name of parameter => value of the parameter
+    def query_parameters
+      {}
+    end
+
+    # Relative path to the endpoint
+    def path
+      "/{databaseId}/recomms/next/item-segments/#{@recomm_id}"
+    end
+  end
+end
