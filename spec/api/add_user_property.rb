@@ -4,7 +4,7 @@
 
 require 'spec_helper'
 require_relative 'set_environment'
-shared_examples 'add property' do
+shared_examples 'add user property' do
   include_context 'set environment'
 
   it 'does not fail with valid name and type' do
